@@ -1,6 +1,6 @@
 // import initOpenCascade, { OpenCascadeInstance } from 'opencascade.js';
 import { Component } from '@angular/core';
-import { BitByBitBase, OccInfo, OccStateEnum } from 'bitbybit-dev';
+import { BitByBitBase, OccStateEnum } from 'bitbybit-core';
 import { Scene, Engine, Color4, Color3, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { LaptopLogic } from './laptop';
 class Laptop {
@@ -137,8 +137,3 @@ export class AppComponent {
 
 
 }
-
-// initOpenCascade().then((occ: OpenCascadeInstance) => {
-//     console.log(occ);
-//     postMessage('occ-initialised');
-// });

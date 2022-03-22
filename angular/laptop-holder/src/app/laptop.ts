@@ -1,5 +1,5 @@
-import { BitByBitBase, Base, BabylonScene, Draw  } from "bitbybit-dev";
-import { OCCT } from "bitbybit-dev/lib/api/inputs/occ-inputs";
+import { BitByBitBase, Base, BabylonScene, Draw  } from "bitbybit-core";
+import { OCCT } from "bitbybit-core/lib/api/inputs/occ-inputs";
 export class LaptopLogic {
 
     private bitbybit: BitByBitBase;

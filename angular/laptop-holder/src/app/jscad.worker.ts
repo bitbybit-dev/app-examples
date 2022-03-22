@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 
-import { initializationComplete, onMessageInput } from 'bitbybit-dev/lib/workers/jscad/jscad-worker';
+import { initializationComplete, onMessageInput } from 'bitbybit-core/lib/workers/jscad/jscad-worker';
 
-import('bitbybit-dev/jscad-generated')
+import('bitbybit-core/jscad-generated')
     .then((s) => {
         initializationComplete(s.default());
     });

@@ -66,6 +66,7 @@ export class AppComponent {
             if (s.state === OccStateEnum.initialised) {
                 this.showSpinner = false;
                 this.bitbybitInitialised = true;
+                this.engine.resize();
                 this.laptopService = new LaptopLogic(this.bitbybit);
                 this.laptopService.do();
             } else if (s.state === OccStateEnum.computing) {

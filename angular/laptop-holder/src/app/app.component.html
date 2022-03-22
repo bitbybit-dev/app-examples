@@ -1,0 +1,80 @@
+<div class="main">
+    <div [ngClass]="{'hidden': !this.showSpinner}" class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+    <canvas [ngClass]="{'opaque': this.showSpinner}" id="renderCanvas" class="example-sidenav-content">
+    </canvas>
+</div>
+<div class="content">
+
+    <div class="explanation">
+        <h1>LAPTOP HOLDER</h1>
+        <h2>Your Example App</h2>
+        <div class="scrolling">
+            <p>
+                <img width="100%" src="assets/lapholders1.jpeg" />
+            </p>
+            <p>
+                If you are selling complex parametric products, it might be interesting for you or your business to make
+                a custom 3D product configurator website.
+            </p>
+            <p>
+                This is an example application which demonstrates possibilities to integrate Bit by bit developers
+                platform in
+                your own websites, configurators or webshops. The idea is to use iframe of your public project on
+                <a href="https://bitbybit.dev">bitbybit.dev</a> and communicate with it through special iframe messaging
+                protocol that we expose in <a href="docs.bitbybit.dev">bitbybit.dev API</a>.
+            </p>
+            <p>
+                By downloading STEP file you can easily 3D print it. To understand how to do that and learn how the
+                script works you can enroll in this free course on our school at <a
+                    href="https://school.bitbybit.dev/p/programming-vertical-laptop-holder-in-typescript">school.bitbybit.dev</a>
+            </p>
+        </div>
+    </div>
+    <div class="space"></div>
+    <div class="interaction" [ngClass]="{'opaque': this.showSpinner}">
+        <div>
+            <ng-container *ngFor="let laptop of laptops; let i = index">
+                <div>
+                    Laptop Nr. {{i + 1}}
+                    <button class="delete" color="primary" mat-flat-button (click)="remove(laptop)" aria-label="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <div class="input">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Width</mat-label>
+                        <input (blur)="render()" type="number" matInput #message maxlength="10"
+                            [(ngModel)]="laptop.width">
+                    </mat-form-field>
+                </div>
+                <div class="input">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Length</mat-label>
+                        <input (blur)="render()" type="number" matInput #message maxlength="10"
+                            [(ngModel)]="laptop.length">
+                    </mat-form-field>
+                </div>
+                <div class="input">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Height</mat-label>
+                        <input (blur)="render()" type="number" matInput #message maxlength="10"
+                            [(ngModel)]="laptop.height">
+                    </mat-form-field>
+                </div>
+            </ng-container>
+        </div>
+        <br>
+        <div>
+            <button mat-raised-button color="primary" (click)="add()" aria-label="Example icon button with a menu icon">
+                Add Laptop
+            </button>
+            <button class="download" mat-raised-button color="primary" (click)="download()"
+                aria-label="Example icon button with a menu icon">
+                Download STEP
+            </button>
+        </div>
+    </div>
+</div>

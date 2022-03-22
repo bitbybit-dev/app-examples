@@ -34,6 +34,7 @@ export class AppComponent {
     ]
 
     scene: Scene;
+    engine: Engine;
     timePassedFromPreviousIteration = 0;
 
     private laptopService: LaptopLogic;
@@ -45,8 +46,8 @@ export class AppComponent {
     ngOnInit() {
         const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
 
-        const engine = new Engine(canvas);
-        this.scene = new Scene(engine);
+        this.engine = new Engine(canvas);
+        this.scene = new Scene(this.engine);
         this.scene.clearColor = new Color4(26 / 255, 28 / 255, 31 / 255, 1);
         const camera = new ArcRotateCamera('Camera', 0, 10, 10, new Vector3(0, 0, 0), this.scene);
         camera.attachControl(canvas, true);
@@ -69,12 +70,18 @@ export class AppComponent {
                 this.laptopService.do();
             } else if (s.state === OccStateEnum.computing) {
                 this.showSpinner = true;
-            } else if (s.state === OccStateEnum.loaded){
+            } else if (s.state === OccStateEnum.loaded) {
                 this.showSpinner = false;
             }
         });
 
-        engine.runRenderLoop(this.renderLoopFunction);
+        this.engine.runRenderLoop(this.renderLoopFunction);
+
+        window.onresize = () => {
+            if (this.engine) {
+                this.engine.resize();
+            }
+        }
     }
 
     async jscadDrawBox() {

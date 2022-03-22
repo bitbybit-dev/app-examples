@@ -21,6 +21,7 @@ export class AppComponent {
 
     title = 'trialwebsite';
     showSpinner = true;
+    bitbybitInitialised = false;
 
     prevLaptops: Laptop[];
     laptops: Laptop[] = [
@@ -48,14 +49,11 @@ export class AppComponent {
         this.scene = new Scene(engine);
         this.scene.clearColor = new Color4(26 / 255, 28 / 255, 31 / 255, 1);
         const camera = new ArcRotateCamera('Camera', 0, 10, 10, new Vector3(0, 0, 0), this.scene);
-        camera.setPosition(new Vector3(0, 10, 20));
         camera.attachControl(canvas, true);
-        camera.minZ = 0;
 
         const light = new HemisphericLight('HemiLight', new Vector3(0, 1, 0), this.scene);
         light.intensityMode = Light.INTENSITYMODE_ILLUMINANCE;
         light.intensity = 1;
-        this.scene.ambientColor = new Color3(0.1, 0.1, 0.1);
         this.scene.metadata = { shadowGenerators: [] };
 
         const occt = new Worker(new URL('./occ.worker', import.meta.url), { name: 'OCC', type: 'module' })
@@ -66,8 +64,13 @@ export class AppComponent {
         this.bitbybit.occtWorkerManager.occWorkerState$.subscribe(s => {
             if (s.state === OccStateEnum.initialised) {
                 this.showSpinner = false;
+                this.bitbybitInitialised = true;
                 this.laptopService = new LaptopLogic(this.bitbybit);
                 this.laptopService.do();
+            } else if (s.state === OccStateEnum.computing) {
+                this.showSpinner = true;
+            } else if (s.state === OccStateEnum.loaded){
+                this.showSpinner = false;
             }
         });
 

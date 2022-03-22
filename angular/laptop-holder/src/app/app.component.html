@@ -3,28 +3,27 @@
         <div></div>
         <div></div>
     </div>
-    <canvas [ngClass]="{'opaque': this.showSpinner}" id="renderCanvas" class="example-sidenav-content">
+    <canvas [ngClass]="{'opaque': !this.bitbybitInitialised}" id="renderCanvas" class="example-sidenav-content">
     </canvas>
 </div>
 <div class="content">
 
     <div class="explanation">
         <h1>LAPTOP HOLDER</h1>
-        <h2>Your Example App</h2>
+        <h2>Configurator</h2>
         <div class="scrolling">
             <p>
                 <img width="100%" src="assets/lapholders1.jpeg" />
             </p>
             <p>
-                If you are selling complex parametric products, it might be interesting for you or your business to make
-                a custom 3D product configurator website.
+                The application allows you to configure custom multi slot laptop holder. Choose how many laptops you want and adjust the basic dimensions. Save your file and use it for 3D printing.
             </p>
             <p>
-                This is an example application which demonstrates possibilities to integrate Bit by bit developers
+                This application also serves as an example which demonstrates possibilities to integrate Bit by bit developers
                 platform in
-                your own websites, configurators or webshops. The idea is to use iframe of your public project on
-                <a href="https://bitbybit.dev">bitbybit.dev</a> and communicate with it through special iframe messaging
-                protocol that we expose in <a href="docs.bitbybit.dev">bitbybit.dev API</a>.
+                your own websites, configurators or webshops. We have recently released our core algorithms as an <a href="https://www.npmjs.com/package/bitbybit-core" target="_blank">npm package</a>.
+                If you are the beginner you can use our <a href="https://bitbybit.dev">bitbybit.dev</a> platform to learn to use the API and construct parametric geometries.
+                If you are professional, consider exploring our <a href="docs.bitbybit.dev">bitbybit.dev API</a>.
             </p>
             <p>
                 By downloading STEP file you can easily 3D print it. To understand how to do that and learn how the
@@ -34,7 +33,7 @@
         </div>
     </div>
     <div class="space"></div>
-    <div class="interaction" [ngClass]="{'opaque': this.showSpinner}">
+    <div class="interaction" [ngClass]="{'opaque': !this.bitbybitInitialised}">
         <div>
             <ng-container *ngFor="let laptop of laptops; let i = index">
                 <div>

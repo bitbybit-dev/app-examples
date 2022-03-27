@@ -35,6 +35,7 @@ export class LaptopLogic {
     constructor(bitbybit: BitByBitBase) {
         this.bitbybit = bitbybit;
     }
+    
     async renderLaptops(laptops) {
 
         laptops.forEach(laptop => {
@@ -142,7 +143,8 @@ export class LaptopLogic {
     }
 }
 
-class Laptop {
+export class Laptop {
+    id?: string;
     width: number;
     length: number;
     height: number;

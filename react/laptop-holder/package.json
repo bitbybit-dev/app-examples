@@ -15,7 +15,7 @@
         "react-scripts": "5.0.0",
         "typescript": "^4.6.2",
         "web-vitals": "^2.1.4",
-        "bitbybit-core": "0.0.5",
+        "bitbybit-core": "0.0.7",
         "file-loader": "6.2.0",
         "@mui/icons-material": "5.5.1",
         "@mui/material": "5.5.2",

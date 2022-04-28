@@ -69,8 +69,12 @@ function App() {
         });
     }, [])
 
-    const download = () => {
-        cupLogic.download();
+    const downloadStep = () => {
+        cupLogic.downloadStep();
+    }
+
+    const downloadStl = () => {
+        cupLogic.downloadStl();
     }
 
     const recompute = () => {
@@ -96,7 +100,6 @@ function App() {
                     <h1>CUP</h1>
                     <h2>Configurator</h2>
                     <div className="scrolling">
-
                         <p>
                             The application allows you to configure a custom cup for your coffee or tea. Choose any combination of parameters to get proprtions that you want. Save your file and use it for 3D printing.
                         </p>
@@ -159,7 +162,8 @@ function App() {
                             />
                         </div>
                         <div className="actions">
-                            <Button disabled={showSpinner} variant="contained" onClick={download}>Download STEP</Button>
+                            <Button disabled={showSpinner} variant="contained" onClick={downloadStep}>Download STEP</Button>
+                            <Button disabled={showSpinner} variant="contained" onClick={downloadStl}>Download STL</Button>
                         </div>
                     </div>
 

@@ -135,10 +135,13 @@ export class CupLogic {
 
     }
 
-    download() {
+    downloadStep() {
         this.bitbybit.occt.io.saveShapeSTEP({ shape: this.cup, filename: 'cup.step' });
     }
 
+    downloadStl() {
+        this.bitbybit.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001 });
+    }
     mapRange(value, low1, high1, low2, high2) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
     }

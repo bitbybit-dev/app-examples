@@ -97,10 +97,14 @@ export class AppComponent {
         }
     }
 
-    download() {
-        this.laptopService.download();
+    downloadStep() {
+        this.laptopService.downloadStep();
     }
 
+    downloadStl() {
+        this.laptopService.downloadStl();
+    }
+    
     laptopWidthChanged(val, laptop: Laptop) {
         laptop.width = val;
     }

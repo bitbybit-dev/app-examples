@@ -111,8 +111,12 @@ function App() {
         return result;
     }
 
-    const download = () => {
-        laptopLogic.download();
+    const downloadStep = () => {
+        laptopLogic.downloadStep();
+    }
+
+    const downloadStl = () => {
+        laptopLogic.downloadStl();
     }
 
     const del = (laptop) => {
@@ -203,7 +207,8 @@ function App() {
                         }
                         <div className="actions">
                             <Button disabled={showSpinner} variant="contained" onClick={add}>Add Laptop</Button>
-                            <Button disabled={showSpinner} variant="contained" onClick={download}>Download STEP</Button>
+                            <Button disabled={showSpinner} variant="contained" onClick={downloadStep}>Download STEP</Button>
+                            <Button disabled={showSpinner} variant="contained" onClick={downloadStl}>Download STL</Button>
                         </div>
                     </div>
 

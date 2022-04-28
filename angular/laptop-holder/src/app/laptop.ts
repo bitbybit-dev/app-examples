@@ -123,8 +123,12 @@ export class LaptopLogic {
         await this.bitbybit.draw.drawAnyAsync({ entity: ground, options: groundOptions });
     }
 
-    download() {
+    downloadStep() {
         this.bitbybit.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step' });
+    }
+
+    downloadStl() {
+        this.bitbybit.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001 });
     }
 
     async render(laptops: Laptop[]) {

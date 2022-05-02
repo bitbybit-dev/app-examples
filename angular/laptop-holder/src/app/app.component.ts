@@ -1,4 +1,3 @@
-// import initOpenCascade, { OpenCascadeInstance } from 'opencascade.js';
 import { Component } from '@angular/core';
 import { BitByBitBase, OccStateEnum } from 'bitbybit-core';
 import { Scene, Engine, Color4, Color3, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';

@@ -4,7 +4,7 @@ import { BitByBitBase, OccStateEnum } from 'bitbybit-core';
 import { Scene, Engine, Color4, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { LaptopLogic, Laptop } from './laptop';
 import { Button, TextField } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { Add, Delete, Download, Menu } from '@mui/icons-material';
 import { usePrevious } from './use-previous';
 
 
@@ -18,6 +18,7 @@ function App() {
     }])
     const prevLaptops = usePrevious(laptops);
 
+    const [menuVisible, setMenuVisible] = useState<boolean>(true);
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const [bitByBitInitialised, setBitByBitInitialised] = useState<boolean>(false);
     const [laptopLogic, setLaptopLogic] = useState<LaptopLogic>(undefined);
@@ -76,7 +77,18 @@ function App() {
     }
 
     const handleLaptopChange = (event, type: 'width' | 'length' | 'height', laptop: Laptop) => {
-        const value = +event.target.value;
+        const val = event.target.value;
+        let value;
+        if (val !== '') {
+            value = +val;
+            if (value < 0) {
+                value = 0.1;
+            } else if (value > 1000) {
+                value = 1000;
+            }
+        } else {
+            value = '';
+        }
         const lap = { ...laptop };
         switch (type) {
             case 'width':
@@ -149,70 +161,82 @@ function App() {
                 </canvas>
             </div>
             <div className="content">
-                <div className="explanation">
-                    <h1>LAPTOP HOLDER</h1>
-                    <h2>Configurator</h2>
-                    <div className="scrolling">
-                        <p>
-                            <img width="100%" src="lapholders1.jpeg" alt="3d printed laptop holder" />
-                        </p>
-                        <p>
-                            The application allows you to configure custom multi slot laptop holder. Choose how many laptops you want and adjust the basic dimensions. Save your file and use it for 3D printing.
-                        </p>
-                        <p>
-                            This application also serves as an example which demonstrates possibilities to integrate Bit by bit developers
-                            platform in
-                            your own websites, configurators or webshops. We have recently released our core algorithms as an <a rel="noreferrer" href="https://www.npmjs.com/package/bitbybit-core" target="_blank">npm package</a>.
-                            If you are the beginner you can use our <a rel="noreferrer" href="https://bitbybit.dev" target="_blank">bitbybit.dev</a> platform to learn to use the API and construct parametric geometries.
-                            If you are professional, consider exploring our <a href="docs.bitbybit.dev" rel="noreferrer" target="_blank">bitbybit.dev API</a>.
-                        </p>
-                        <p>
-                            By downloading STEP file you can easily 3D print it. To understand how to do that and learn how the
-                            script works you can enroll in this free course on our school at <a rel="noreferrer"
-                                href="https://school.bitbybit.dev/p/programming-vertical-laptop-holder-in-typescript" target="_blank">school.bitbybit.dev</a>
-                        </p>
+                <div className="menu">
+                    <div className="actions buttons-non-mobile">
+                        <Button disabled={showSpinner} variant="contained" onClick={add}>Add Laptop</Button>
+                        <Button disabled={showSpinner} variant="contained" onClick={downloadStep}>Download STEP</Button>
+                        <Button disabled={showSpinner} variant="contained" onClick={downloadStl}>Download STL</Button>
                     </div>
+                    <div className="actions buttons-mobile">
+                        <Button disabled={showSpinner} variant="contained" onClick={add}><Add />Add</Button>
+                        <Button disabled={showSpinner} variant="contained" onClick={downloadStep}><Download />STEP</Button>
+                        <Button disabled={showSpinner} variant="contained" onClick={downloadStl}><Download />STL</Button>
+                    </div>
+                    <Button variant="contained" onClick={() => setMenuVisible(!menuVisible)}><Menu /></Button>
                 </div>
-                <div className="space"></div>
-                <div className="interaction" >
-                    <div>
-                        {
-                            laptops.map((laptop, index) => {
-                                return (
-                                    <div key={laptop.id}>
-                                        <div>
-                                            Laptop Nr. {index + 1}
-                                            <div className="delete">
-                                                <Button disabled={showSpinner} variant="contained" onClick={() => del(laptop)}><Delete /></Button>
-                                            </div>
-                                        </div>
-                                        <div className="input">
-                                            <TextField disabled={showSpinner} label="Width" variant="outlined" type="number" value={laptop.width} onChange={(e) => {
-                                                handleLaptopChange(e, 'width', laptop)
-                                            }} onBlur={() => render(laptops)} />
-                                        </div>
-                                        <div className="input">
-                                            <TextField disabled={showSpinner} label="Length" variant="outlined" type="number" value={laptop.length} onChange={(e) => {
-                                                handleLaptopChange(e, 'length', laptop)
-                                            }} onBlur={() => render(laptops)} />
-                                        </div>
-                                        <div className="input">
-                                            <TextField disabled={showSpinner} label="Height" variant="outlined" type="number" value={laptop.height} onChange={(e) => {
-                                                handleLaptopChange(e, 'height', laptop)
-                                            }} onBlur={() => render(laptops)} />
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                        <div className="actions">
-                            <Button disabled={showSpinner} variant="contained" onClick={add}>Add Laptop</Button>
-                            <Button disabled={showSpinner} variant="contained" onClick={downloadStep}>Download STEP</Button>
-                            <Button disabled={showSpinner} variant="contained" onClick={downloadStl}>Download STL</Button>
+                {menuVisible &&
+                    <>
+                        <div className="explanation">
+                            <h1>LAPTOP HOLDER</h1>
+                            <h2>Configurator</h2>
+                            <div className="scrolling">
+                                <p>
+                                    <img width="100%" src="lapholders1.jpeg" alt="3d printed laptop holder" />
+                                </p>
+                                <p>
+                                    The application allows you to configure custom multi slot laptop holder. Choose how many laptops you want and adjust the basic dimensions. Save your file and use it for 3D printing.
+                                </p>
+                                <p>
+                                    This application also serves as an example which demonstrates possibilities to integrate Bit by bit developers
+                                    platform in
+                                    your own websites, configurators or webshops. We have recently released our core algorithms as an <a rel="noreferrer" href="https://www.npmjs.com/package/bitbybit-core" target="_blank">npm package</a>.
+                                    If you are the beginner you can use our <a rel="noreferrer" href="https://bitbybit.dev" target="_blank">bitbybit.dev</a> platform to learn to use the API and construct parametric geometries.
+                                    If you are professional, consider exploring our <a href="docs.bitbybit.dev" rel="noreferrer" target="_blank">bitbybit.dev API</a>.
+                                </p>
+                                <p>
+                                    By downloading STEP file you can easily 3D print it. To understand how to do that and learn how the
+                                    script works you can enroll in this free course on our school at <a rel="noreferrer"
+                                        href="https://school.bitbybit.dev/p/programming-vertical-laptop-holder-in-typescript" target="_blank">school.bitbybit.dev</a>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                        <div className="space"></div>
+                        <div className="interaction" >
+                            <div className="interaction-content scrolling">
+                                {
+                                    laptops.map((laptop, index) => {
+                                        return (
+                                            <div key={laptop.id}>
+                                                <div>
+                                                    Laptop Nr. {index + 1}
+                                                    <div className="delete">
+                                                        <Button disabled={showSpinner} variant="contained" onClick={() => del(laptop)}><Delete /></Button>
+                                                    </div>
+                                                </div>
+                                                <div className="input">
+                                                    <TextField disabled={showSpinner} size="small" label="Width" variant="outlined" type="number" value={laptop.width} onChange={(e) => {
+                                                        handleLaptopChange(e, 'width', laptop)
+                                                    }} onBlur={() => render(laptops)} />
+                                                </div>
+                                                <div className="input">
+                                                    <TextField disabled={showSpinner} size="small" label="Length" variant="outlined" type="number" value={laptop.length} onChange={(e) => {
+                                                        handleLaptopChange(e, 'length', laptop)
+                                                    }} onBlur={() => render(laptops)} />
+                                                </div>
+                                                <div className="input">
+                                                    <TextField disabled={showSpinner} size="small" label="Height" variant="outlined" type="number" value={laptop.height} onChange={(e) => {
+                                                        handleLaptopChange(e, 'height', laptop)
+                                                    }} onBlur={() => render(laptops)} />
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                }
 
-                </div >
+                            </div>
+                        </div >
+                    </>
+                }
             </div >
         </div >
     );

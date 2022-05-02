@@ -5,31 +5,36 @@
 Not supports in Firefox and IE */
 
 /* total width */
-.explanation .scrolling::-webkit-scrollbar {
-    background-color:rgba(0,0,0,0);
-    width:4px
+.scrolling::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0);
+    width: 4px;
+    pointer-events: all;
 }
 
 /* background of the scrollbar except button or resizer */
-.explanation .scrolling::-webkit-scrollbar-track {
-    background-color:rgba(0,0,0,0);
+.scrolling::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
 }
-.explanation .scrolling::-webkit-scrollbar-track:hover {
-    background-color:rgba(0,0,0,0);
+
+.scrolling::-webkit-scrollbar-track:hover {
+    background-color: rgba(0, 0, 0, 0);
 }
 
 /* scrollbar itself */
-.explanation .scrolling::-webkit-scrollbar-thumb {
-    background-color:rgba(0,0,0,0);
-    border-radius:16px;
-    border:1px solid #000;
+.scrolling::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 16px;
+    border: 1px solid #000;
 }
-.explanation .scrolling::-webkit-scrollbar-thumb:hover {
-    background-color:rgba(0,0,0,0);
+
+.scrolling::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0);
 }
 
 /* set button(top and bottom of the scrollbar) */
-.explanation .scrolling::-webkit-scrollbar-button {display:none}
+.scrolling::-webkit-scrollbar-button {
+    display: none
+}
 
 .main {
     width: 100%;
@@ -49,17 +54,17 @@ Not supports in Firefox and IE */
 }
 
 h1 {
-    background: -webkit-linear-gradient(45deg, #3f51b5,#9fadff);
+    background: -webkit-linear-gradient(45deg, #3f51b5, #9fadff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-top:0px;
+    margin-top: 0px;
     font-weight: 200;
     font-size: 40px
 }
 
 h2 {
     font-weight: 300;
-    color:white;
+    color: white;
 }
 
 .space {
@@ -67,32 +72,35 @@ h2 {
     pointer-events: none;
 }
 
-canvas { 
+canvas {
     position: absolute;
     outline: none;
     border: none;
-    width:100%;
+    width: 100%;
     height: 100%;
 }
 
-canvas :focus{
+canvas :focus {
     outline: none;
 }
 
+
+
 .explanation {
-    flex:0.2;
+    flex: 0.2;
     margin: 40px;
-    pointer-events:all;
+    pointer-events: all;
 }
 
 .explanation .scrolling {
     width: 100%;
     max-height: 60vh;
     overflow-y: scroll;
-    pointer-events:all;
-    background-color: rgba(0,0,0,0.3);
+    pointer-events: all;
+    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 3px;
-    color: white;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .explanation p {
@@ -101,16 +109,27 @@ canvas :focus{
 }
 
 .interaction {
-    flex:0.3;
+    flex: 0.3;
     margin: 40px;
+    margin-bottom: 120px;
 }
 
+.interaction-content {
+    pointer-events: all;
+    max-height: 100%;
+    overflow-y: scroll;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    padding: 5px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
 
 .input {
     width: 32%;
     display: inline-block;
     margin: 1px;
-    pointer-events:all;
+    pointer-events: all;
 }
 
 .delete {
@@ -120,7 +139,7 @@ canvas :focus{
 }
 
 .download {
-    margin-left:10px;
+    margin-left: 10px;
 }
 
 button {
@@ -131,14 +150,17 @@ img {
     opacity: 0.6;
 }
 
-a, a:visited, a:focus, a:link {
+a,
+a:visited,
+a:focus,
+a:link {
     color: rgb(192, 210, 255);
 }
 
 .lds-ripple {
     z-index: 2;
-    top: calc( 50% - 75px );
-    left: calc( 50% - 75px );
+    top: calc(50% - 75px);
+    left: calc(50% - 75px);
     display: inline-block;
     position: absolute;
     width: 150px;
@@ -157,20 +179,27 @@ a, a:visited, a:focus, a:link {
     animation-delay: -0.5s;
 }
 
+.menu {
+    position: absolute;
+    right: 80px;
+    bottom: 50px;
+}
+
 @keyframes lds-ripple {
     0% {
-      top: 72px;
-      left: 72px;
-      width: 0;
-      height: 0;
-      opacity: 1;
+        top: 72px;
+        left: 72px;
+        width: 0;
+        height: 0;
+        opacity: 1;
     }
+
     100% {
-      top: 0px;
-      left: 0px;
-      width: 144px;
-      height: 144px;
-      opacity: 0;
+        top: 0px;
+        left: 0px;
+        width: 144px;
+        height: 144px;
+        opacity: 0;
     }
 }
 
@@ -184,8 +213,73 @@ a, a:visited, a:focus, a:link {
 
 .actions {
     margin-top: 20px;
+    display: inline-block;
 }
 
 .actions Button {
-    margin-right:20px;
+    margin-right: 20px;
+}
+
+.buttons-mobile {
+    display: none;
+    margin-right: 3px;
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .explanation {
+        flex: 0;
+        display: none;
+    }
+
+    .space {
+        flex: 0.5;
+    }
+
+    .interaction {
+        flex: 0.5;
+        margin-right:90px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .explanation {
+        flex: 0;
+        display: none;
+    }
+
+    .space {
+        flex: 0;
+    }
+
+    .interaction {
+        flex: 1;
+        margin-right:90px;
+    }
+
+    .buttons-non-mobile {
+        display: none;
+
+    }
+
+    .buttons-mobile {
+        display: block;
+    }
+
+    .buttons-mobile Button {
+        display: block;
+    }
+
+    .actions Button {
+        margin-right: 4px;
+        margin-bottom: 4px;
+        width: 30px;
+    }
+
+    .menu {
+        right: 5px;
+        bottom: 120px;
+    }
+
+
 }

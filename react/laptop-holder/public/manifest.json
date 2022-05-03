@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Laptop Holder",
+  "name": "App that lets you configure your own laptop holder (Made by Bit by bit developers)",
   "icons": [
     {
       "src": "favicon.ico",

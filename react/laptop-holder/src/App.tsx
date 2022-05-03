@@ -152,9 +152,8 @@ function App() {
         <div className="App">
             <div className="main">
                 {showSpinner &&
-                    <div className="lds-ripple">
-                        <div></div>
-                        <div></div>
+                    <div className="lds-ellipsis">
+                        <div></div><div></div><div></div><div></div>
                     </div>
                 }
                 <canvas id="renderCanvas" className={bitByBitInitialised ? '' : 'opaque'}>
@@ -163,14 +162,14 @@ function App() {
             <div className="content">
                 <div className="menu">
                     <div className="actions buttons-non-mobile">
-                        <Button disabled={showSpinner} variant="contained" onClick={add}>Add Laptop</Button>
-                        <Button disabled={showSpinner} variant="contained" onClick={downloadStep}>Download STEP</Button>
-                        <Button disabled={showSpinner} variant="contained" onClick={downloadStl}>Download STL</Button>
+                        <Button variant="contained" disabled={showSpinner} onClick={add}>Add Laptop</Button>
+                        <Button variant="contained" onClick={downloadStep}>Download STEP</Button>
+                        <Button variant="contained" onClick={downloadStl}>Download STL</Button>
                     </div>
                     <div className="actions buttons-mobile">
-                        <Button disabled={showSpinner} variant="contained" onClick={add}><Add />Add</Button>
-                        <Button disabled={showSpinner} variant="contained" onClick={downloadStep}><Download />STEP</Button>
-                        <Button disabled={showSpinner} variant="contained" onClick={downloadStl}><Download />STL</Button>
+                        <Button variant="contained" disabled={showSpinner} onClick={add}><Add />Add</Button>
+                        <Button variant="contained" onClick={downloadStep}><Download />STEP</Button>
+                        <Button variant="contained" onClick={downloadStl}><Download />STL</Button>
                     </div>
                     <Button variant="contained" onClick={() => setMenuVisible(!menuVisible)}><Menu /></Button>
                 </div>
@@ -210,21 +209,21 @@ function App() {
                                                 <div>
                                                     Laptop Nr. {index + 1}
                                                     <div className="delete">
-                                                        <Button disabled={showSpinner} variant="contained" onClick={() => del(laptop)}><Delete /></Button>
+                                                        <Button variant="contained" onClick={() => del(laptop)}><Delete /></Button>
                                                     </div>
                                                 </div>
                                                 <div className="input">
-                                                    <TextField disabled={showSpinner} size="small" label="Width" variant="outlined" type="number" value={laptop.width} onChange={(e) => {
+                                                    <TextField size="small" label="Width" variant="outlined" type="number" value={laptop.width} onChange={(e) => {
                                                         handleLaptopChange(e, 'width', laptop)
                                                     }} onBlur={() => render(laptops)} />
                                                 </div>
                                                 <div className="input">
-                                                    <TextField disabled={showSpinner} size="small" label="Length" variant="outlined" type="number" value={laptop.length} onChange={(e) => {
+                                                    <TextField size="small" label="Length" variant="outlined" type="number" value={laptop.length} onChange={(e) => {
                                                         handleLaptopChange(e, 'length', laptop)
                                                     }} onBlur={() => render(laptops)} />
                                                 </div>
                                                 <div className="input">
-                                                    <TextField disabled={showSpinner} size="small" label="Height" variant="outlined" type="number" value={laptop.height} onChange={(e) => {
+                                                    <TextField size="small" label="Height" variant="outlined" type="number" value={laptop.height} onChange={(e) => {
                                                         handleLaptopChange(e, 'height', laptop)
                                                     }} onBlur={() => render(laptops)} />
                                                 </div>
@@ -232,7 +231,6 @@ function App() {
                                         );
                                     })
                                 }
-
                             </div>
                         </div >
                     </>

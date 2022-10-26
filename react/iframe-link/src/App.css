@@ -46,3 +46,7 @@ iframe {
 img {
     width: 600px;
 }
+
+a {
+    display: block;
+}

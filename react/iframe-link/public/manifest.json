@@ -1,6 +1,6 @@
 {
-  "short_name": "Laptop Holder",
-  "name": "App that lets you configure your own laptop holder (Made by Bit by bit developers)",
+  "short_name": "IFrame link",
+  "name": "App that shows how to use iframes to bitbybit preview links",
   "icons": [
     {
       "src": "favicon.ico",

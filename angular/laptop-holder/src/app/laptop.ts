@@ -1,4 +1,4 @@
-import { BitByBitBase, Base, BabylonScene, Draw  } from "bitbybit-core";
+import { BitByBitBase, Base, BabylonScene, Draw } from "bitbybit-core";
 import { OCCT } from "bitbybit-core/lib/api/inputs/occ-inputs";
 export class LaptopLogic {
 
@@ -55,7 +55,7 @@ export class LaptopLogic {
                 height: laptop.height,
                 center: laptop.center
             });
-            const laptopFillet = await this.bitbybit.occt.shapes.edge.filletEdges({ shape: laptopBaseModel, edgeList: undefined, radius: 0.2 });
+            const laptopFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopBaseModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
             const laptopVisModel = await this.bitbybit.occt.shapes.solid.createBox({
@@ -64,7 +64,7 @@ export class LaptopLogic {
                 height: laptop.height,
                 center: laptop.center
             });
-            const laptopVisFillet = await this.bitbybit.occt.shapes.edge.filletEdges({ shape: laptopVisModel, edgeList: undefined, radius: 0.2 });
+            const laptopVisFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
             const di = new OCCT.DrawShapeDto(laptopVisFillet);
@@ -83,7 +83,7 @@ export class LaptopLogic {
         const extrusion = await this.bitbybit.occt.operations.extrude({
             shape: polygonWire, direction: [0, 0, totalDistance += this.distanceBetweenLaptops + previousLaptopLength / 2]
         });
-        const laptopStandFillet = await this.bitbybit.occt.shapes.edge.filletEdges({ shape: extrusion, edgeList: undefined, radius: 1 });
+        const laptopStandFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: extrusion, radius: 1 });
         const laptopStandThick = await this.bitbybit.occt.operations.makeThickSolidSimple({ shape: laptopStandFillet, offset: -0.5 });
 
         this.laptopStand = await this.bitbybit.occt.booleans.difference({ shape: laptopStandThick, shapes: laptopFillets, keepEdges: false });
@@ -124,11 +124,11 @@ export class LaptopLogic {
     }
 
     downloadStep() {
-        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step' });
+        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step', adjustYtoZ: false });
     }
 
     downloadStl() {
-        this.bitbybit.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001 });
+        this.bitbybit.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
     }
 
     async render(laptops: Laptop[]) {

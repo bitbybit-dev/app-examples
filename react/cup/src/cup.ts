@@ -115,9 +115,8 @@ export class CupLogic {
             keepEdges: false
         });
 
-        this.cup = await this.bitbybit.occt.shapes.edge.filletEdges({
+        this.cup = await this.bitbybit.occt.fillets.filletEdges({
             radius: roundingRadius,
-            edgeList: undefined,
             shape: cupBase
         });
 
@@ -136,11 +135,11 @@ export class CupLogic {
     }
 
     downloadStep() {
-        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.cup, filename: 'cup.step' });
+        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.cup, filename: 'cup.step', adjustYtoZ: false });
     }
 
     downloadStl() {
-        this.bitbybit.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001 });
+        this.bitbybit.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001, adjustYtoZ: false });
     }
     mapRange(value, low1, high1, low2, high2) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);

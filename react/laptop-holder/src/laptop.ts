@@ -1,0 +1,156 @@
+import { BitByBitBase, Base, BabylonScene, Draw } from "bitbybit-core";
+import { OCCT } from "bitbybit-core/lib/api/inputs/occ-inputs";
+export class LaptopLogic {
+
+    private bitbybit: BitByBitBase;
+
+    private laptops: Laptop[] = [
+        {
+            width: 30.41,
+            length: 1.5,
+            height: 21.24,
+        }
+    ]
+
+    private laptopStand;
+    private laptopStandMesh;
+    private laptopsFilletsMesh;
+
+    private controlPoints = [
+        [-12.5, 0, 0],
+        [-8, 13, 0],
+        [-4, 11, 0],
+        [-2, 6, 0],
+        [2, 6, 0],
+        [4, 14, 0],
+        [8, 17, 0],
+        [12.5, 0, 0]
+    ] as Base.Point3[];
+
+    private whiteColor = '#ffffff';
+    private holderColor = '#333333';
+    private laptopLiftedHeight = 3;
+    private distanceBetweenLaptops = 1.7;
+
+    constructor(bitbybit: BitByBitBase) {
+        this.bitbybit = bitbybit;
+    }
+
+    async renderLaptops(laptops) {
+
+        laptops.forEach(laptop => {
+            laptop.center = [0, laptop.height / 2 + this.laptopLiftedHeight, 0] as Base.Point3;
+        });
+
+        let laptopFillets = [];
+        let totalDistance = 0;
+        let previousLaptopLength = 0;
+
+        laptops.forEach(async (laptop) => {
+            totalDistance += this.distanceBetweenLaptops + laptop.length / 2 + previousLaptopLength / 2;
+            previousLaptopLength = laptop.length;
+            laptop.center[2] = totalDistance;
+            const laptopBaseModel = await this.bitbybit.occt.shapes.solid.createBox({
+                width: laptop.width,
+                length: laptop.length,
+                height: laptop.height,
+                center: laptop.center
+            });
+            const laptopFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopBaseModel, radius: 0.2 });
+            laptopFillets.push(laptopFillet);
+
+            const laptopVisModel = await this.bitbybit.occt.shapes.solid.createBox({
+                width: laptop.width,
+                length: laptop.length - 0.01,
+                height: laptop.height,
+                center: laptop.center
+            });
+            const laptopVisFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
+            laptopFillets.push(laptopFillet);
+
+            const di = new OCCT.DrawShapeDto(laptopVisFillet);
+            di.faceOpacity = 0.2;
+            di.edgeWidth = 5;
+            di.edgeOpacity = 0.6;
+            di.edgeColour = this.whiteColor;
+            di.faceColour = this.whiteColor;
+            const laptopFilletMesh = await this.bitbybit.occt.drawShape(di);
+            this.laptopsFilletsMesh.push(laptopFilletMesh);
+        })
+
+        const polygonWire = await this.bitbybit.occt.shapes.wire.createPolygonWire({
+            points: this.controlPoints
+        });
+        const extrusion = await this.bitbybit.occt.operations.extrude({
+            shape: polygonWire, direction: [0, 0, totalDistance += this.distanceBetweenLaptops + previousLaptopLength / 2]
+        });
+        const laptopStandFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: extrusion, radius: 1 });
+        const laptopStandThick = await this.bitbybit.occt.operations.makeThickSolidSimple({ shape: laptopStandFillet, offset: -0.5 });
+
+        this.laptopStand = await this.bitbybit.occt.booleans.difference({ shape: laptopStandThick, shapes: laptopFillets, keepEdges: false });
+        const li = new OCCT.DrawShapeDto(this.laptopStand);
+        li.faceOpacity = 1;
+        li.faceColour = this.holderColor;
+        li.edgeColour = this.whiteColor;
+        li.edgeWidth = 5;
+        this.laptopStandMesh = await this.bitbybit.draw.drawAnyAsync({ entity: this.laptopStand, options: li });
+    }
+
+    async do() {
+        this.bitbybit.babylon.scene.backgroundColour({ colour: '#bbbbbb' });
+
+        const cameraConf = new BabylonScene.CameraConfigurationDto();
+        cameraConf.lookAt = [0, 11, 0];
+        cameraConf.position = [30, 10, 35];
+        cameraConf.wheelPrecision = 0.3;
+        cameraConf.panningSensibility = 1000;
+        this.bitbybit.babylon.scene.adjustActiveArcRotateCamera(cameraConf);
+
+        const pointLightConf = new BabylonScene.PointLightDto();
+        pointLightConf.position = [-15, 20, -5];
+        pointLightConf.intensity = 8000;
+        pointLightConf.diffuse = '#3333ff';
+        pointLightConf.radius = 0;
+        this.bitbybit.babylon.scene.drawPointLight(pointLightConf);
+        this.laptopsFilletsMesh = [];
+
+
+        await this.renderLaptops(this.laptops);
+
+        const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], direction: [0, 1, 0], radius: 75, });
+        const groundOptions = new Draw.DrawOcctShapeOptions();
+        groundOptions.faceColour = this.whiteColor;
+        groundOptions.drawEdges = false;
+        await this.bitbybit.draw.drawAnyAsync({ entity: ground, options: groundOptions });
+    }
+
+    downloadStep() {
+        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step', adjustYtoZ: false, });
+    }
+
+    downloadStl() {
+        this.bitbybit.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
+    }
+
+    async render(laptops: Laptop[]) {
+        if (this.laptopStandMesh) {
+            const lap = await this.laptopStandMesh;
+            this.bitbybit.babylon.mesh.dispose({ babylonMesh: lap });
+        }
+        if (this.laptopsFilletsMesh && this.laptopsFilletsMesh.length > 0) {
+            const res = await Promise.all(this.laptopsFilletsMesh);
+            res.forEach(r => {
+                this.bitbybit.babylon.mesh.dispose({ babylonMesh: r });
+            });
+        }
+        this.renderLaptops(laptops);
+    }
+}
+
+export class Laptop {
+    id?: string;
+    width: number;
+    length: number;
+    height: number;
+    center?: Base.Point3;
+}

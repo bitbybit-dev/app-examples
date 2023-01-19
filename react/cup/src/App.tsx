@@ -25,6 +25,7 @@ function App() {
 
         const engine = new Engine(canvas);
         const scene = new Scene(engine);
+        engine.setHardwareScalingLevel(0.5);
         scene.clearColor = new Color4(26 / 255, 28 / 255, 31 / 255, 1);
         const camera = new ArcRotateCamera('Camera', 0, 10, 10, new Vector3(0, 0, 0), scene);
         camera.attachControl(canvas, true);

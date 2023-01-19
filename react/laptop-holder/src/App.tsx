@@ -29,6 +29,7 @@ function App() {
         const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
 
         const engine = new Engine(canvas);
+        engine.setHardwareScalingLevel(0.5);
         const scene = new Scene(engine);
         scene.clearColor = new Color4(26 / 255, 28 / 255, 31 / 255, 1);
         const camera = new ArcRotateCamera('Camera', 0, 10, 10, new Vector3(0, 0, 0), scene);

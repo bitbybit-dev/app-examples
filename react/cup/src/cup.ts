@@ -1,10 +1,12 @@
 import { Mesh } from "@babylonjs/core";
 import { BitByBitBase, Draw } from "bitbybit-core";
 import { TransformNode, Engine } from '@babylonjs/core';
+import { OCCT } from "bitbybit-core/lib/api/bitbybit/occt/occt";
 
 export class CupLogic {
 
     private bitbybit: BitByBitBase;
+    private occt: OCCT;
 
     private cup;
     private cupMesh;
@@ -15,6 +17,7 @@ export class CupLogic {
 
     constructor(bitbybit: BitByBitBase) {
         this.bitbybit = bitbybit;
+        this.occt = bitbybit.occt as OCCT;
     }
 
     private node: TransformNode;
@@ -24,7 +27,6 @@ export class CupLogic {
         if (this.pointLight) {
             this.pointLight.dispose();
         }
-
         this.bitbybit.babylon.scene.adjustActiveArcRotateCamera({
             position: [-5, 20, -35],
             lookAt: [0, 5, 0],
@@ -86,36 +88,37 @@ export class CupLogic {
             center: [cupRadius, cupHeight / 2, 0]
         });
 
-        const boolHolder = await this.bitbybit.occt.booleans.difference({
+
+        const boolHolder = await this.occt.booleans.difference({
             shape: box,
             shapes: [boxInside],
             keepEdges: false
         });
 
-        const cylinder = await this.bitbybit.occt.shapes.solid.createCylinder({
+        const cylinder = await this.occt.shapes.solid.createCylinder({
             center: [0, 0, 0],
             radius: cupRadius,
             height: cupHeight
         });
 
-        const baseUnion = await this.bitbybit.occt.booleans.union({
+        const baseUnion = await this.occt.booleans.union({
             shapes: [cylinder, boolHolder],
             keepEdges: false
         });
 
-        const cylinderInside = await this.bitbybit.occt.shapes.solid.createCylinder({
+        const cylinderInside = await this.occt.shapes.solid.createCylinder({
             center: [0, cupThickness, 0],
             radius: cupRadius - cupThickness,
             height: cupHeight
         });
 
-        const cupBase = await this.bitbybit.occt.booleans.difference({
+        const cupBase = await this.occt.booleans.difference({
             shape: baseUnion,
             shapes: [cylinderInside],
             keepEdges: false
         });
 
-        this.cup = await this.bitbybit.occt.fillets.filletEdges({
+        this.cup = await this.occt.fillets.filletEdges({
             radius: roundingRadius,
             shape: cupBase
         });
@@ -130,8 +133,6 @@ export class CupLogic {
         di.precision = 0.001;
         this.cupMesh = await this.bitbybit.draw.drawAnyAsync({ entity: this.cup, options: di }) as Mesh;
         this.cupMesh.parent = this.node;
-
-
     }
 
     downloadStep() {
@@ -139,8 +140,9 @@ export class CupLogic {
     }
 
     downloadStl() {
-        this.bitbybit.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001, adjustYtoZ: false });
+        this.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001, adjustYtoZ: false });
     }
+
     mapRange(value, low1, high1, low2, high2) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
     }

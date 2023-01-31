@@ -1,4 +1,7 @@
 # Bit By Bit Developers App Examples
+
+<img src="https://app.bitbybit.dev/assets/git-cover.png" alt="Picture showing bitbybit.dev platform">
+
 These app examples are meant to show how bitbybit-core and bitbybit-occt npm packages can be used to create 3D models on the browser and on the server.
 bitbybit-core library works only on the browser and is dependant on many great 3D libraries. bitbybit-occt library is much more versatile and can be used both on the nodejs and browser applications.
 
@@ -9,6 +12,11 @@ For browser based applications we provide few examples using bitbybit-core libra
 
 # Github
 https://github.com/bitbybit-dev/app-examples
+
+
+<img src="https://app.bitbybit.dev/assets/laptop-holder.png" alt="Laptop Holder Configurator">
+<img src="https://app.bitbybit.dev/assets/terace-furniture.png" alt="Terrace Furniture Configurator">
+<img src="https://app.bitbybit.dev/assets/cup.png" alt="Cup Configurator">
 
 # NPM
 CORE

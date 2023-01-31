@@ -4,7 +4,7 @@ import { OCCT } from "bitbybit-core/lib/api/bitbybit/occt/occt";
 export class LaptopLogic {
 
     private bitbybit: BitByBitBase;
-    private occt;
+    private occt: OCCT;
 
     private laptops: Laptop[] = [
         {
@@ -97,6 +97,23 @@ export class LaptopLogic {
         li.edgeColour = this.whiteColor;
         li.edgeWidth = 5;
         this.laptopStandMesh = await this.bitbybit.draw.drawAnyAsync({ entity: this.laptopStand, options: li });
+    }
+
+    async createBoxAndFillet({ width, length, height, center }) {
+        const box = await this.occt.shapes.solid.createBox({ width, length, height, center });
+        const fillet = await this.occt.fillets.filletEdges({ shape: box, radius: 0.2 });
+        return fillet;
+    }
+
+    async createRotatedArcsAroundCenterPoint({ center, radius, startAngle, endAngle, angleStep, axis }) {
+        const arcs = [];
+        for (let angle = startAngle; angle < endAngle; angle += angleStep) {
+            const arc = await this.occt.shapes.wire.createArc({
+                center, radius, startAngle: angle, endAngle: angle + angleStep, axis
+            });
+            arcs.push(arc);
+        }
+        return arcs;
     }
 
     async do() {

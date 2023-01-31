@@ -38,7 +38,7 @@ Other Closed Source Apps We Built
 Terrace Furniture   
 https://app-store.bitbybit.dev/terrace-furniture    
 
-<img src="https://app.bitbybit.dev/assets/terace.png" alt="Terrace Furniture Configurator">
+<img src="https://app.bitbybit.dev/assets/terrace.png" alt="Terrace Furniture Configurator">
 
 # Build package
 tsc -p tsconfig.bitbybit.json  

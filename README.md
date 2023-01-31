@@ -14,10 +14,6 @@ For browser based applications we provide few examples using bitbybit-core libra
 https://github.com/bitbybit-dev/app-examples
 
 
-<img src="https://app.bitbybit.dev/assets/laptop-holder.png" alt="Laptop Holder Configurator">
-<img src="https://app.bitbybit.dev/assets/terace-furniture.png" alt="Terrace Furniture Configurator">
-<img src="https://app.bitbybit.dev/assets/cup.png" alt="Cup Configurator">
-
 # NPM
 CORE
 https://www.npmjs.com/package/bitbybit-core
@@ -25,18 +21,24 @@ OCCT
 https://www.npmjs.com/package/bitbybit-occt
 
 # Example Applications
-Laptop Holder
-https://app-store.bitbybit.dev/laptop-holder
-Github Source Code Angular - https://github.com/bitbybit-dev/app-examples/tree/main/angular/laptop-holder  
-Github Source Code React - https://github.com/bitbybit-dev/app-examples/tree/main/react/laptop-holder  
+Laptop Holder   
+https://app-store.bitbybit.dev/laptop-holder    
+Github Source Code Angular - https://github.com/bitbybit-dev/app-examples/tree/main/angular/laptop-holder   
+Github Source Code React - https://github.com/bitbybit-dev/app-examples/tree/main/react/laptop-holder   
 
-Cup Configurator  
-https://app-store.bitbybit.dev/cup
-Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/cup
+<img src="https://app.bitbybit.dev/assets/laptop-holder.png" alt="Laptop Holder Configurator">  
 
-Other Closed Source Apps We Built
-Terrace Furniture
-https://app-store.bitbybit.dev/terrace-furniture
+Cup Configurator    
+https://app-store.bitbybit.dev/cup  
+Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/cup   
+
+<img src="https://app.bitbybit.dev/assets/cup.png" alt="Cup Configurator">
+
+Other Closed Source Apps We Built   
+Terrace Furniture   
+https://app-store.bitbybit.dev/terrace-furniture    
+
+<img src="https://app.bitbybit.dev/assets/terace.png" alt="Terrace Furniture Configurator">
 
 # Build package
 tsc -p tsconfig.bitbybit.json  

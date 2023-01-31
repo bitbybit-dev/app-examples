@@ -10,12 +10,13 @@
     },
     "author": "Bit By Bit Developers",
     "license": "MIT",
-    "dependencies": {},
     "type": "module",
+    "dependencies": {
+        "bitbybit-occt": "0.9.16"
+    },
     "devDependencies": {
         "concurrently": "^7.6.0",
         "nodemon": "^2.0.20",
-        "typescript": "^4.9.4",
-        "bitbybit-occt": "0.9.15"
+        "typescript": "^4.9.4"
     }
 }

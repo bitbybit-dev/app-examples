@@ -5,6 +5,16 @@ module.exports = {
                 test: /\.wasm$/,
                 type: "javascript/auto",
                 loader: "file-loader",
+            },
+            {
+                test: /\.m?js/,
+                type: "javascript/auto",
+            },
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
+                },
             }
         ]
     },

@@ -1,8 +1,10 @@
 import { BitByBitBase, Base, BabylonScene, Draw } from "bitbybit-core";
-import { OCCT } from "bitbybit-core/lib/api/inputs/occ-inputs";
+import * as Inputs from "bitbybit-core/lib/api/inputs";
+import { OCCT } from "bitbybit-core/lib/api/bitbybit/occt/occt";
 export class LaptopLogic {
 
     private bitbybit: BitByBitBase;
+    private occt;
 
     private laptops: Laptop[] = [
         {
@@ -34,6 +36,7 @@ export class LaptopLogic {
 
     constructor(bitbybit: BitByBitBase) {
         this.bitbybit = bitbybit;
+        this.occt = bitbybit.occt as OCCT;
     }
 
     async renderLaptops(laptops) {
@@ -68,27 +71,27 @@ export class LaptopLogic {
             const laptopVisFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
-            const di = new OCCT.DrawShapeDto(laptopVisFillet);
+            const di = new Inputs.OCCT.DrawShapeDto(laptopVisFillet);
             di.faceOpacity = 0.2;
             di.edgeWidth = 5;
             di.edgeOpacity = 0.6;
             di.edgeColour = this.whiteColor;
             di.faceColour = this.whiteColor;
-            const laptopFilletMesh = await this.bitbybit.occt.drawShape(di);
+            const laptopFilletMesh = await this.occt.drawShape(di);
             this.laptopsFilletsMesh.push(laptopFilletMesh);
         })
 
-        const polygonWire = await this.bitbybit.occt.shapes.wire.createPolygonWire({
+        const polygonWire = await this.occt.shapes.wire.createPolygonWire({
             points: this.controlPoints
         });
-        const extrusion = await this.bitbybit.occt.operations.extrude({
+        const extrusion = await this.occt.operations.extrude({
             shape: polygonWire, direction: [0, 0, totalDistance += this.distanceBetweenLaptops + previousLaptopLength / 2]
         });
-        const laptopStandFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: extrusion, radius: 1 });
-        const laptopStandThick = await this.bitbybit.occt.operations.makeThickSolidSimple({ shape: laptopStandFillet, offset: -0.5 });
+        const laptopStandFillet = await this.occt.fillets.filletEdges({ shape: extrusion, radius: 1 });
+        const laptopStandThick = await this.occt.operations.makeThickSolidSimple({ shape: laptopStandFillet, offset: -0.5 });
 
-        this.laptopStand = await this.bitbybit.occt.booleans.difference({ shape: laptopStandThick, shapes: laptopFillets, keepEdges: false });
-        const li = new OCCT.DrawShapeDto(this.laptopStand);
+        this.laptopStand = await this.occt.booleans.difference({ shape: laptopStandThick, shapes: laptopFillets, keepEdges: false });
+        const li = new Inputs.OCCT.DrawShapeDto(this.laptopStand);
         li.faceOpacity = 1;
         li.faceColour = this.holderColor;
         li.edgeColour = this.whiteColor;
@@ -129,7 +132,7 @@ export class LaptopLogic {
     }
 
     downloadStl() {
-        this.bitbybit.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
+        this.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
     }
 
     async render(laptops: Laptop[]) {

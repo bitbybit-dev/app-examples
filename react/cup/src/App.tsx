@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BitByBitBase, OccStateEnum } from 'bitbybit-core';
+import { BitByBitBase } from 'bitbybit-core';
+import { OccStateEnum } from 'bitbybit-occt-worker';
 import { Scene, Engine, Color4, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { CupLogic } from './cup';
 import { Button, Slider } from '@mui/material';

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { BitByBitBase, OccStateEnum } from 'bitbybit-core';
+import { BitByBitBase } from 'bitbybit-core';
+import { OccStateEnum } from 'bitbybit-occt-worker';
 import { Scene, Engine, Color4, Color3, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { LaptopLogic } from './laptop';
 class Laptop {
@@ -104,7 +105,7 @@ export class AppComponent {
     downloadStl() {
         this.laptopService.downloadStl();
     }
-    
+
     laptopWidthChanged(val, laptop: Laptop) {
         laptop.width = val;
     }

@@ -29,7 +29,7 @@ const port = process.env.PORT;
 app.get('/', (req: Request, res: Response) => {
     if (wire) {
         const circle = wire.createCircleWire({ radius: 1, center: [0, 0, 0], direction: [0, 1, 0] });
-        const pt = wire.pointOnWireAtParam({ shape: circle, param: 0.2 }).result;
+        const pt = wire.pointOnWireAtParam({ shape: circle, param: 0.2 });
         res.send(`${pt}`);
     } else {
         res.send('OCC not initialised');

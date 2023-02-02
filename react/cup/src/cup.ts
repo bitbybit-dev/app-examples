@@ -27,6 +27,7 @@ export class CupLogic {
         if (this.pointLight) {
             this.pointLight.dispose();
         }
+        
         this.bitbybit.babylon.scene.adjustActiveArcRotateCamera({
             position: [-5, 20, -35],
             lookAt: [0, 5, 0],

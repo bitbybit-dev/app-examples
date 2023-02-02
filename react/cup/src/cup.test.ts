@@ -23,6 +23,7 @@ describe('OCCT edge unit tests', () => {
     it('should init scene', async () => {
         await cupLogic.initScene(engine);
         expect(cupLogic['node']).toBeDefined();
+        
     });
 
     // it('should be true', async () => {

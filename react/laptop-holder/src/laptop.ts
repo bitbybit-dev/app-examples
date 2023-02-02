@@ -53,22 +53,22 @@ export class LaptopLogic {
             totalDistance += this.distanceBetweenLaptops + laptop.length / 2 + previousLaptopLength / 2;
             previousLaptopLength = laptop.length;
             laptop.center[2] = totalDistance;
-            const laptopBaseModel = await this.bitbybit.occt.shapes.solid.createBox({
+            const laptopBaseModel = await this.occt.shapes.solid.createBox({
                 width: laptop.width,
                 length: laptop.length,
                 height: laptop.height,
                 center: laptop.center
             });
-            const laptopFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopBaseModel, radius: 0.2 });
+            const laptopFillet = await this.occt.fillets.filletEdges({ shape: laptopBaseModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
-            const laptopVisModel = await this.bitbybit.occt.shapes.solid.createBox({
+            const laptopVisModel = await this.occt.shapes.solid.createBox({
                 width: laptop.width,
                 length: laptop.length - 0.01,
                 height: laptop.height,
                 center: laptop.center
             });
-            const laptopVisFillet = await this.bitbybit.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
+            const laptopVisFillet = await this.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
             const di = new Inputs.OCCT.DrawShapeDto(laptopVisFillet);
@@ -105,17 +105,6 @@ export class LaptopLogic {
         return fillet;
     }
 
-    async createRotatedArcsAroundCenterPoint({ center, radius, startAngle, endAngle, angleStep, axis }) {
-        const arcs = [];
-        for (let angle = startAngle; angle < endAngle; angle += angleStep) {
-            const arc = await this.occt.shapes.wire.createArc({
-                center, radius, startAngle: angle, endAngle: angle + angleStep, axis
-            });
-            arcs.push(arc);
-        }
-        return arcs;
-    }
-
     async do() {
         this.bitbybit.babylon.scene.backgroundColour({ colour: '#bbbbbb' });
 
@@ -137,7 +126,7 @@ export class LaptopLogic {
 
         await this.renderLaptops(this.laptops);
 
-        const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], direction: [0, 1, 0], radius: 75, });
+        const ground = await this.occt.shapes.face.createCircleFace({ center: [0, 0, 0], direction: [0, 1, 0], radius: 75, });
         const groundOptions = new Draw.DrawOcctShapeOptions();
         groundOptions.faceColour = this.whiteColor;
         groundOptions.drawEdges = false;
@@ -145,7 +134,7 @@ export class LaptopLogic {
     }
 
     downloadStep() {
-        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step', adjustYtoZ: false, });
+        this.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step', adjustYtoZ: false, });
     }
 
     downloadStl() {

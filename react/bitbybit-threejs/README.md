@@ -13,10 +13,10 @@ Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/reac
 Visit https://bitbybit.dev to use our full cloud platform.
 
 # NPM Libraries Used
-OCCT
-https://www.npmjs.com/package/bitbybit-occt
-OCCT WebWorker
-https://www.npmjs.com/package/bitbybit-occt-worker
+OCCT    
+https://www.npmjs.com/package/bitbybit-occt 
+OCCT WebWorker  
+https://www.npmjs.com/package/bitbybit-occt-worker  
 
 # Media Channels
 Discord: https://discord.gg/GSe3VMe  

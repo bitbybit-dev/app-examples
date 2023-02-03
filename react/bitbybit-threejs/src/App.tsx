@@ -40,10 +40,10 @@ function App() {
     const firstRenderRef = useRef(true);
 
     useEffect(() => {
-        if (firstRenderRef.current) {
-            firstRenderRef.current = false;
-            return;
-        }
+        // if (firstRenderRef.current) {
+        //     firstRenderRef.current = false;
+        //     return;
+        // }
         init();
     }, [])
 

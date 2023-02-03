@@ -26,14 +26,12 @@ async function visualize(bitbybitOcct: BitByBitOCCT, shape: Inputs.OCCT.TopoDSSh
 
 export async function addShapeToScene(bitbybitOcct: BitByBitOCCT, shape: Inputs.OCCT.TopoDSShapePointer, scene: Scene, precision: number): Promise<Group> {
     const material = new MeshNormalMaterial();
-
     let geometries = await visualize(bitbybitOcct, shape, precision);
 
     let group = new Group();
     geometries.forEach(geometry => {
         group.add(new Mesh(geometry, material));
     });
-
     group.name = "shape";
     scene.add(group);
     return group;

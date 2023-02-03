@@ -28,6 +28,12 @@ Github Source Code React - https://github.com/bitbybit-dev/app-examples/tree/mai
 
 <img src="https://app.bitbybit.dev/assets/laptop-holder.png" alt="Laptop Holder Configurator">  
 
+THREEJS 3D Printable Vase    
+https://app-store.bitbybit.dev/bitbybit-threejs  
+Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/bitbybit-threejs   
+
+<img src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="ThreeJS Vase Configurator">
+
 Cup Configurator    
 https://app-store.bitbybit.dev/cup  
 Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/cup   

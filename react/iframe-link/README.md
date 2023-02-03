@@ -4,6 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+In the project directory, you may have to run:
+
+### `npm install react-app-rewired`
+
 In the project directory, you can run:
 
 ### `npm start`

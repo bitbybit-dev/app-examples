@@ -171,7 +171,7 @@ function App() {
             }
             <div className="App">
                 <div className={hideMenu ? 'explanation hidden' : 'explanation'}>
-                    <h1>THREEJS EXAMPLE</h1>
+                    <h1>THREEJS</h1>
                     <h2>3D Print Parametric Vase</h2>
                     <div className="madeBy">
                         <a className="all-pointer-events" href="https://bitbybit.dev" target="_blank" rel="noreferrer">

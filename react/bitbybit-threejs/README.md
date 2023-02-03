@@ -1,25 +1,55 @@
-# Getting Started with Create React App
+# THREEJS Example Applicaiton of 3D printable vase
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img src="https://app.bitbybit.dev/assets/git-cover.png" alt="Picture showing bitbybit.dev platform">
 
-### `npm install react-app-rewired`
+This application demonstrates the basic setup that can be used to build 3D react apps by using Bit By Bit Developers libraries and THREEJS web based game engine.
+
+# Run Live Demo Page
+https://app-store.bitbybit.dev/bitbybit-threejs  
+Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/bitbybit-threejs   
+
+<img src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="ThreeJS Vase Configurator">
+
+Visit https://bitbybit.dev to use our full cloud platform.
+
+# NPM Libraries Used
+OCCT
+https://www.npmjs.com/package/bitbybit-occt
+OCCT WebWorker
+https://www.npmjs.com/package/bitbybit-occt-worker
+
+# Media Channels
+Discord: https://discord.gg/GSe3VMe  
+Youtube: https://www.youtube.com/channel/UCWM0VODRsLYOjB2IAaFHBSQ  
+Instagram: https://www.instagram.com/bitbybit.dev  
+Twitter: https://twitter.com/bitbybit_dev  
+LinkedIn: https://lnkd.in/gQjEQA2  
+Facebook: https://www.facebook.com/bitbybitdev  
+Medium: https://bitbybit-dev.medium.com/  
+
+# Principles
+Bit By Bit Developers company will keep these core algorithms that you can find in this repository free and opensource for its users. These algorithms are based on other open-source projects, run and are deployed on the browser, thus there is no point of closing them down from public.
+
+# About Bit By Bit Developers platform
+Bit By Bit Developers web platform allows creators to program geometry through simple visual programming language or choose monaco typescript editor with full intellisense of bitbybit API. This cloud platform can fulfil many practical, educational and artistic needs of its users. Through familiar programming interface used in tools such as Scratch and Blockly.Games we expose powerful 3D algorithms that make it easier to implement various parametric tasks. Our goal is to make it very simple for users to share their ideas and designs. We want to encourage everyone to engage in the future of this tool.
+
+# Getting Started with this app
+
+Clone this git repository
+### `npm install`
+
+This will install all the dependencies, such as React, bitbybit-occt, bitbybit-occt-worker, threejs and more.
 ## Available Scripts
 
 In the project directory, you can run:
 
 ### `npm start`
 
-
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -30,19 +60,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

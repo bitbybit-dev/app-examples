@@ -133,6 +133,7 @@ function App() {
         controls.update();
         controls.target = new THREE.Vector3(0, 20, 0);
         controls.enableDamping = true;
+        controls.dampingFactor = 0.1
         controls.zoomSpeed = 0.1;
 
         renderer.shadowMap.enabled = true;
@@ -161,6 +162,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
+            <img className="imageback" src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="image showing the bitbybit threejs 3d printable vase configurator app"></img>
             <div className="hideMenu">
                 <Button onClick={() => setHideMenu(!hideMenu)} color="primary" variant="contained">{hideMenu ? 'Show menu' : 'Hide menu'}</Button>
             </div>

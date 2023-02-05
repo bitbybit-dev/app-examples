@@ -50,6 +50,12 @@ function App() {
 
     const createVaseByLoft = async (bitbybit?: BitByBitOCCT, scene?: THREE.Scene) => {
         if (scene && bitbybit) {
+
+            if (vase) {
+                // delete previous
+                await bitbybit.occt.deleteShape({ shape: vase });
+            }
+
             const wire1 = await bitbybit.occt.shapes.wire.createCircleWire({
                 radius: 10 + addRadiusNarrow,
                 center: [0, 0, 0],
@@ -78,12 +84,14 @@ function App() {
             const shell = await bitbybit.occt.shapes.shell.sewFaces({ shapes: [loftFace, baseFace], tolerance: 1e-7 });
             const fillet = await bitbybit.occt.fillets.filletEdges({ shape: shell, radius: 10 });
             const thick = await bitbybit.occt.operations.makeThickSolidSimple({ shape: fillet, offset: -2 })
-            const vase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
+            const finalVase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
 
-            const group = await addShapeToScene(bitbybit, vase, scene, 0.05);
+            const group = await addShapeToScene(bitbybit, finalVase, scene, 0.05);
+
+            await bitbybit.occt.deleteShapes({ shapes: [wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick] });
 
             setGroup(group);
-            setVase(vase);
+            setVase(finalVase);
         }
     }
 

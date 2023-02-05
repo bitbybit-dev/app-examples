@@ -40,19 +40,37 @@ function App() {
     const firstRenderRef = useRef(true);
 
     useEffect(() => {
-        // if (firstRenderRef.current) {
-        //     firstRenderRef.current = false;
-        //     return;
-        // }
+        if (process.env.REACT_APP_ENVIRONMENT !== 'production' &&
+            firstRenderRef.current) {
+            firstRenderRef.current = false;
+            return;
+        }
         init();
     }, [])
 
     const createVaseByLoft = async (bitbybit?: BitByBitOCCT, scene?: THREE.Scene) => {
         if (scene && bitbybit) {
-            const wire1 = await bitbybit.occt.shapes.wire.createCircleWire({ radius: 10 + addRadiusNarrow, center: [0, 0, 0], direction: [0, 1, 0] });
-            const wire2 = await bitbybit.occt.shapes.wire.createEllipseWire({ radiusMinor: 20 + addRadiusWide, radiusMajor: 25 + addRadiusWide, center: [0, 20 + addMiddleHeight, 0], direction: [0, 1, 0] });
-            const wire3 = await bitbybit.occt.shapes.wire.createCircleWire({ radius: 10 + addRadiusNarrow, center: [0, 30 + addMiddleHeight, 0], direction: [0, 1, 0] });
-            const wire4 = await bitbybit.occt.shapes.wire.createCircleWire({ radius: 15 + addRadiusWide, center: [0, 40 + addMiddleHeight + addTopHeight, 0], direction: [0, 1, 0.1] });
+            const wire1 = await bitbybit.occt.shapes.wire.createCircleWire({
+                radius: 10 + addRadiusNarrow,
+                center: [0, 0, 0],
+                direction: [0, 1, 0]
+            });
+            const wire2 = await bitbybit.occt.shapes.wire.createEllipseWire({
+                radiusMinor: 20 + addRadiusWide,
+                radiusMajor: 25 + addRadiusWide,
+                center: [0, 20 + addMiddleHeight, 0],
+                direction: [0, 1, 0]
+            });
+            const wire3 = await bitbybit.occt.shapes.wire.createCircleWire({
+                radius: 10 + addRadiusNarrow,
+                center: [0, 30 + addMiddleHeight, 0],
+                direction: [0, 1, 0]
+            });
+            const wire4 = await bitbybit.occt.shapes.wire.createCircleWire({
+                radius: 15 + addRadiusWide,
+                center: [0, 40 + addMiddleHeight + addTopHeight, 0],
+                direction: [0, 1, 0.1]
+            });
             const lAdvOpt = new Inputs.OCCT.LoftAdvancedDto([wire1, wire2, wire3, wire4]);
             const loft = await bitbybit.occt.operations.loftAdvanced(lAdvOpt);
             const loftFace = await bitbybit.occt.shapes.face.getFace({ shape: loft, index: 0 });
@@ -60,11 +78,12 @@ function App() {
             const shell = await bitbybit.occt.shapes.shell.sewFaces({ shapes: [loftFace, baseFace], tolerance: 1e-7 });
             const fillet = await bitbybit.occt.fillets.filletEdges({ shape: shell, radius: 10 });
             const thick = await bitbybit.occt.operations.makeThickSolidSimple({ shape: fillet, offset: -2 })
-            const chamfer = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
+            const vase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
 
-            const group = await addShapeToScene(bitbybit, chamfer, scene, 0.05);
+            const group = await addShapeToScene(bitbybit, vase, scene, 0.05);
+
             setGroup(group);
-            setVase(chamfer);
+            setVase(vase);
         }
     }
 

@@ -1,12 +1,12 @@
 import { Mesh } from "@babylonjs/core";
 import { BitByBitBase, Draw } from "bitbybit-core";
 import { TransformNode, Engine } from '@babylonjs/core';
-import { OCCT } from "bitbybit-core/lib/api/bitbybit/occt/occt";
+import { OCCTW } from "bitbybit-core/lib/api/bitbybit/occt/occt";
 
 export class CupLogic {
 
     private bitbybit: BitByBitBase;
-    private occt: OCCT;
+    private occt: OCCTW;
 
     private cup;
     private cupMesh;
@@ -17,7 +17,7 @@ export class CupLogic {
 
     constructor(bitbybit: BitByBitBase) {
         this.bitbybit = bitbybit;
-        this.occt = bitbybit.occt as OCCT;
+        this.occt = bitbybit.occt as OCCTW;
     }
 
     private node: TransformNode;

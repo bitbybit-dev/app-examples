@@ -15,7 +15,7 @@ describe('OCCT edge unit tests', () => {
         engine = new NullEngine();
         const scene = new Scene(engine);
         const camera = new ArcRotateCamera('Camera', 0, 10, 10, new Vector3(0, 0, 0), scene);
-        await bitbybit.init(scene, undefined, undefined, occt);
+        await bitbybit.init(scene, undefined, undefined);
         console.log(bitbybit.babylon.scene.activateCamera);
         cupLogic = new CupLogic(bitbybit);
     });
@@ -23,7 +23,7 @@ describe('OCCT edge unit tests', () => {
     it('should init scene', async () => {
         await cupLogic.initScene(engine);
         expect(cupLogic['node']).toBeDefined();
-        
+
     });
 
     // it('should be true', async () => {

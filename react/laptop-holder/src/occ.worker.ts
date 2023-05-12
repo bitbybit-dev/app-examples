@@ -5,7 +5,7 @@ import { OpenCascadeInstance } from 'bitbybit-occt/bitbybit-dev-occt/bitbybit-de
 import { initializationComplete, onMessageInput } from 'bitbybit-occt-worker';
 
 initOpenCascade().then((occ: OpenCascadeInstance) => {
-    initializationComplete(occ);
+    initializationComplete(occ, undefined);
 });
 
 addEventListener('message', ({ data }) => {

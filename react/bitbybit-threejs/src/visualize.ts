@@ -1,4 +1,4 @@
-import * as Inputs from 'bitbybit-occt/lib/api/inputs/inputs';
+import { Inputs } from 'bitbybit-occt';
 import { BitByBitOCCT } from 'bitbybit-occt-worker';
 import { BufferAttribute, BufferGeometry, Group, Mesh, MeshNormalMaterial, Scene } from 'three';
 

@@ -1,6 +1,4 @@
-import { BitByBitBase, Base, BabylonScene, Draw } from "bitbybit-core";
-import { OCCTW } from "bitbybit-core/lib/api/bitbybit/occt/occt";
-import * as Inputs from "bitbybit-core/lib/api/inputs";
+import { BitByBitBase, Inputs, BabylonScene, Draw, OCCTW } from "bitbybit-core";
 export class LaptopLogic {
 
     private bitbybit: BitByBitBase;
@@ -27,7 +25,7 @@ export class LaptopLogic {
         [4, 14, 0],
         [8, 17, 0],
         [12.5, 0, 0]
-    ] as Base.Point3[];
+    ] as Inputs.Base.Point3[];
 
     private whiteColor = '#ffffff';
     private holderColor = '#333333';
@@ -41,7 +39,7 @@ export class LaptopLogic {
     async renderLaptops(laptops) {
 
         laptops.forEach(laptop => {
-            laptop.center = [0, laptop.height / 2 + this.laptopLiftedHeight, 0] as Base.Point3;
+            laptop.center = [0, laptop.height / 2 + this.laptopLiftedHeight, 0] as Inputs.Base.Point3;
         });
 
         let laptopFillets = [];
@@ -101,14 +99,14 @@ export class LaptopLogic {
     async do() {
         this.bitbybit.babylon.scene.backgroundColour({ colour: '#bbbbbb' });
 
-        const cameraConf = new BabylonScene.CameraConfigurationDto();
+        const cameraConf = new Inputs.BabylonScene.CameraConfigurationDto();
         cameraConf.lookAt = [0, 11, 0];
         cameraConf.position = [30, 10, 35];
         cameraConf.wheelPrecision = 0.3;
         cameraConf.panningSensibility = 1000;
         this.bitbybit.babylon.scene.adjustActiveArcRotateCamera(cameraConf);
 
-        const pointLightConf = new BabylonScene.PointLightDto();
+        const pointLightConf = new Inputs.BabylonScene.PointLightDto();
         pointLightConf.position = [-15, 20, -5];
         pointLightConf.intensity = 8000;
         pointLightConf.diffuse = '#3333ff';
@@ -120,7 +118,7 @@ export class LaptopLogic {
         await this.renderLaptops(this.laptops);
 
         const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], direction: [0, 1, 0], radius: 75, });
-        const groundOptions = new Draw.DrawOcctShapeOptions();
+        const groundOptions = new Inputs.Draw.DrawOcctShapeOptions();
         groundOptions.faceColour = this.whiteColor;
         groundOptions.drawEdges = false;
         await this.bitbybit.draw.drawAnyAsync({ entity: ground, options: groundOptions });
@@ -153,5 +151,5 @@ class Laptop {
     width: number;
     length: number;
     height: number;
-    center?: Base.Point3;
+    center?: Inputs.Base.Point3;
 }

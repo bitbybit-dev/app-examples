@@ -3,10 +3,10 @@ import * as THREE from 'three';
 import { BitByBitOCCT, OccStateEnum } from 'bitbybit-occt-worker';
 import './App.css';
 import { addShapeToScene } from './visualize';
-import * as Inputs from 'bitbybit-occt/lib/api/inputs/inputs';
+import { Inputs } from 'bitbybit-occt';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
-import { Button, createTheme, IconButton, Slider, ThemeProvider } from '@mui/material';
+import { Button, createTheme, Slider, ThemeProvider } from '@mui/material';
 import { Group, Scene } from 'three';
 import { Download } from '@mui/icons-material';
 
@@ -174,7 +174,7 @@ function App() {
 
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        renderer.setClearColor(new THREE.Color(0.1, 0.11, 0.12), 1);
+        renderer.setClearColor(new THREE.Color(0x000000), 1);
 
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {

@@ -1,7 +1,6 @@
 import { Mesh } from "@babylonjs/core";
-import { BitByBitBase, Draw } from "bitbybit-core";
+import { BitByBitBase, Inputs, OCCTW } from "bitbybit-core";
 import { TransformNode, Engine } from '@babylonjs/core';
-import { OCCTW } from "bitbybit-core/lib/api/bitbybit/occt/occt";
 
 export class CupLogic {
 
@@ -26,7 +25,7 @@ export class CupLogic {
         if (this.pointLight) {
             this.pointLight.dispose();
         }
-        
+
         this.bitbybit.babylon.scene.adjustActiveArcRotateCamera({
             position: [-5, 20, -35],
             lookAt: [0, 5, 0],
@@ -48,13 +47,13 @@ export class CupLogic {
 
         const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], radius: 20, direction: [0, 1, 0] })
 
-        const di = new Draw.DrawOcctShapeOptions();
+        const di = new Inputs.Draw.DrawOcctShapeOptions();
         di.faceColour = this.white;
         await this.bitbybit.draw.drawAnyAsync({ entity: ground, options: di }) as Mesh;
 
         this.node = this.bitbybit.babylon.node.createWorldNode();
 
-        engine.runRenderLoop(()=> {
+        engine.runRenderLoop(() => {
             this.bitbybit.babylon.node.rotate({ node: this.node, axis: [0, 1, 0], angle: 0.1 });
         })
     }
@@ -123,7 +122,7 @@ export class CupLogic {
             shape: cupBase
         });
 
-        const di = new Draw.DrawOcctShapeOptions();
+        const di = new Inputs.Draw.DrawOcctShapeOptions();
         di.faceColour = faceColour;
         di.faceOpacity = 1;
         di.edgeOpacity = 1;

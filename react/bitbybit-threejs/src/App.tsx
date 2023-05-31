@@ -13,10 +13,10 @@ import { Download } from '@mui/icons-material';
 const theme = createTheme({
     palette: {
         primary: {
-            main: 'rgb(225, 162, 120)', // very red
+            main: 'rgb(225, 162, 120)',
         },
         secondary: {
-            main: '#00fff0', // very cyan
+            main: '#00fff0',
         },
     },
 });

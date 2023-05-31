@@ -14,7 +14,6 @@ export class CupLogic {
 
     private white = '#ffffff'
 
-
     constructor(bitbybit: BitByBitBase) {
         this.bitbybit = bitbybit;
         this.occt = bitbybit.occt as OCCTW;

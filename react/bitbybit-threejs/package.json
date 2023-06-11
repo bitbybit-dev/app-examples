@@ -4,7 +4,7 @@
     "private": true,
     "homepage": "https://app-store.bitbybit.dev/bitbybit-threejs",
     "dependencies": {
-        "bitbybit-occt-worker": "0.11.6",
+        "bitbybit-occt-worker": "0.11.8",
         "three": "0.152.2",
         "@testing-library/jest-dom": "5.16.5",
         "@testing-library/react": "14.0.0",

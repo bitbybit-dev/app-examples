@@ -4,7 +4,7 @@ import { BufferAttribute, BufferGeometry, Group, Mesh, MeshNormalMaterial, Scene
 
 async function visualize(bitbybitOcct: BitByBitOCCT, shape: Inputs.OCCT.TopoDSShapePointer, precision: number) {
     const geometries: THREE.BufferGeometry[] = []
-    const res = await bitbybitOcct.occt.shapeToMesh({ shape, adjustYtoZ: false, precision });
+    const res: Inputs.OCCT.DecomposedMeshDto = await bitbybitOcct.occt.shapeToMesh({ shape, adjustYtoZ: false, precision });
     let meshData = res.faceList.map(face => {
         return {
             positions: face.vertex_coord,

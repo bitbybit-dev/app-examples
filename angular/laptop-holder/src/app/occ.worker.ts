@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
-import initOpenCascade from 'bitbybit-occt/bitbybit-dev-occt';
-import { OpenCascadeInstance } from 'bitbybit-occt/bitbybit-dev-occt/bitbybit-dev-occt.js';
-import { initializationComplete, onMessageInput } from 'bitbybit-occt-worker';
+import initOpenCascade from '@bitbybit-dev/occt/bitbybit-dev-occt';
+import { OpenCascadeInstance } from '@bitbybit-dev/occt/bitbybit-dev-occt/bitbybit-dev-occt.js';
+import { initializationComplete, onMessageInput } from '@bitbybit-dev/occt-worker';
 
 initOpenCascade().then((occ: OpenCascadeInstance) => {
     initializationComplete(occ, undefined);

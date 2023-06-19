@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BitByBitBase } from 'bitbybit-core';
-import { OccStateEnum } from 'bitbybit-occt-worker';
+import { BitByBitBase } from '@bitbybit-dev/core';
+import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Scene, Engine, Color4, Color3, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { LaptopLogic } from './laptop';
 class Laptop {

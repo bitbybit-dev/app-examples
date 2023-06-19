@@ -1,5 +1,5 @@
-import { Inputs } from 'bitbybit-occt';
-import { BitByBitOCCT } from 'bitbybit-occt-worker';
+import { Inputs } from '@bitbybit-dev/occt';
+import { BitByBitOCCT } from '@bitbybit-dev/occt-worker';
 import { BufferAttribute, BufferGeometry, Group, Mesh, MeshNormalMaterial, Scene } from 'three';
 
 async function visualize(bitbybitOcct: BitByBitOCCT, shape: Inputs.OCCT.TopoDSShapePointer, precision: number) {

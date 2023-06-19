@@ -1,5 +1,5 @@
-import { Inputs, BitByBitBase } from "bitbybit-core";
-import { OCCTW } from "bitbybit-core";
+import { Inputs, BitByBitBase } from "@bitbybit-dev/core";
+import { OCCTW } from "@bitbybit-dev/core";
 
 export class LaptopLogic {
 

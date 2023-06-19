@@ -1,5 +1,5 @@
 import { Mesh } from "@babylonjs/core";
-import { BitByBitBase, Inputs, OCCTW } from "bitbybit-core";
+import { BitByBitBase, Inputs, OCCTW } from "@bitbybit-dev/core";
 import { TransformNode, Engine } from '@babylonjs/core';
 
 export class CupLogic {

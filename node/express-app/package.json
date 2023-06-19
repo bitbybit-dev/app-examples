@@ -13,7 +13,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "bitbybit-occt": "0.11.8"
+    "@bitbybit-dev/occt": "0.11.9"
   },
   "type":"module",
   "devDependencies": {

@@ -4,6 +4,7 @@
     "private": true,
     "homepage": "https://app-store.bitbybit.dev/cup",
     "dependencies": {
+        "@bitbybit-dev/core": "0.11.9",
         "@testing-library/jest-dom": "5.16.4",
         "@testing-library/react": "13.1.1",
         "@testing-library/user-event": "14.1.1",
@@ -16,7 +17,6 @@
         "react-scripts": "5.0.1",
         "typescript": "^4.6.2",
         "web-vitals": "^2.1.4",
-        "bitbybit-core": "0.11.8",
         "file-loader": "6.2.0",
         "@mui/icons-material": "5.6.2",
         "@mui/material": "5.6.4",

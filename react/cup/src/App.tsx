@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BitByBitBase } from 'bitbybit-core';
-import { OccStateEnum } from 'bitbybit-occt-worker';
+import { BitByBitBase } from '@bitbybit-dev/core';
+import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Scene, Engine, Color4, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { CupLogic } from './cup';
 import { Button, Slider } from '@mui/material';
@@ -108,7 +108,7 @@ function App() {
                         <p>
                             This application also serves as an example which demonstrates possibilities to integrate Bit by bit developers
                             platform in
-                            your own websites, configurators or webshops. We have recently released our core algorithms as an <a rel="noreferrer" href="https://www.npmjs.com/package/bitbybit-core" target="_blank">npm package</a>.
+                            your own websites, configurators or webshops. We have recently released our core algorithms as an <a rel="noreferrer" href="https://www.npmjs.com/package/@bitbybit-dev/core" target="_blank">npm package</a>.
                             If you are the beginner you can use our <a rel="noreferrer" href="https://bitbybit.dev" target="_blank">bitbybit.dev</a> platform to learn to use the API and construct parametric geometries.
                             If you are professional, consider exploring our <a href="docs.bitbybit.dev" rel="noreferrer" target="_blank">bitbybit.dev API</a>.
                         </p>

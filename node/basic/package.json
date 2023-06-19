@@ -1,7 +1,7 @@
 {
     "name": "basic",
     "version": "1.0.0",
-    "description": "Example of how to use bitbybit-occt within node",
+    "description": "Example of how to use @bitbybit-dev/occt within node",
     "main": "index.js",
     "scripts": {
         "build": "npx tsc",
@@ -12,7 +12,7 @@
     "license": "MIT",
     "type": "module",
     "dependencies": {
-        "bitbybit-occt": "0.11.8"
+        "@bitbybit-dev/occt": "0.11.9"
     },
     "devDependencies": {
         "concurrently": "^7.6.0",

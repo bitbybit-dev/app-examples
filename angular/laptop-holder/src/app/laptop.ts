@@ -1,4 +1,4 @@
-import { BitByBitBase, Inputs, BabylonScene, Draw, OCCTW } from "bitbybit-core";
+import { BitByBitBase, Inputs, BabylonScene, Draw, OCCTW } from "@bitbybit-dev/core";
 export class LaptopLogic {
 
     private bitbybit: BitByBitBase;

@@ -16,9 +16,9 @@ https://github.com/bitbybit-dev/app-examples
 
 # NPM
 CORE
-https://www.npmjs.com/package/bitbybit-core
+https://www.npmjs.com/package/@bitbybit-dev/core
 OCCT
-https://www.npmjs.com/package/bitbybit-occt
+https://www.npmjs.com/package/@bitbybit-dev/occt
 
 # Example Applications
 Laptop Holder   

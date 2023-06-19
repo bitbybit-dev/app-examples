@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 
-import { Workers } from 'bitbybit-core';
+import { Workers } from '@bitbybit-dev/core';
 
-import('bitbybit-core/jscad-generated')
+import('@bitbybit-dev/core/jscad-generated')
     .then((s) => {
         Workers.initializationComplete(s.default());
     });

@@ -1,8 +1,8 @@
-import initOpenCascade from "bitbybit-occt/bitbybit-dev-occt/node.js";
-import { OCCTWire } from "bitbybit-occt/lib/services/shapes/wire.js";
-import { OccHelper } from "bitbybit-occt/lib/occ-helper.js";
-import { VectorHelperService } from "bitbybit-occt/lib/api/vector-helper.service.js";
-import { ShapesHelperService } from "bitbybit-occt/lib/api/shapes-helper.service.js";
+import initOpenCascade from "@bitbybit-dev/occt/bitbybit-dev-occt/node.js";
+import { OCCTWire } from "@bitbybit-dev/occt/lib/services/shapes/wire.js";
+import { OccHelper } from "@bitbybit-dev/occt/lib/occ-helper.js";
+import { VectorHelperService } from "@bitbybit-dev/occt/lib/api/vector-helper.service.js";
+import { ShapesHelperService } from "@bitbybit-dev/occt/lib/api/shapes-helper.service.js";
 
 let wire: OCCTWire;
 

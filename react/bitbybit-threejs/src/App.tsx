@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { BitByBitOCCT, OccStateEnum } from 'bitbybit-occt-worker';
+import { BitByBitOCCT, OccStateEnum } from '@bitbybit-dev/occt-worker';
 import './App.css';
 import { addShapeToScene } from './visualize';
-import { Inputs } from 'bitbybit-occt';
+import { Inputs } from '@bitbybit-dev/occt';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
 import { Button, createTheme, Slider, ThemeProvider } from '@mui/material';
@@ -217,7 +217,7 @@ function App() {
                             Check out our full platform at <a rel="noreferrer" target="_blank" href="https://bitbybit.dev">bitbybit.dev</a>
                         </div>
                         <div className="all-pointer-events">
-                            Npm package used <a rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/bitbybit-occt-worker">bitbybit-occt-worker</a>
+                            Npm package used <a rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/@bitbybit-dev/occt-worker">@bitbybit-dev/occt-worker</a>
                         </div>
                         <div className="all-pointer-events">
                             Our github <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev">bitbybit-dev</a>

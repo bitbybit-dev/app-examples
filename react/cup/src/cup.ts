@@ -26,13 +26,13 @@ export class CupLogic {
             this.pointLight.dispose();
         }
 
-        this.bitbybit.babylon.scene.adjustActiveArcRotateCamera({
-            position: [-5, 20, -35],
-            lookAt: [0, 5, 0],
-            maxZ: 1000,
-            panningSensibility: 1000,
-            wheelPrecision: 1
-        })
+        const optionsCamera = new Inputs.BabylonScene.CameraConfigurationDto();
+        optionsCamera.position = [-5, 20, -35];
+        optionsCamera.lookAt = [0, 5, 0];
+        optionsCamera.maxZ = 1000;
+        optionsCamera.panningSensibility = 1000;
+        optionsCamera.wheelPrecision = 1;
+        this.bitbybit.babylon.scene.adjustActiveArcRotateCamera(optionsCamera);
 
         this.pointLight = this.bitbybit.babylon.scene.drawPointLight({
             position: [10, 20, 10],
@@ -135,11 +135,11 @@ export class CupLogic {
     }
 
     downloadStep() {
-        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.cup, filename: 'cup.step', adjustYtoZ: false });
+        this.bitbybit.occt.io.saveShapeSTEP({ shape: this.cup, fileName: 'cup.step', adjustYtoZ: false });
     }
 
     downloadStl() {
-        this.occt.io.saveShapeStl({ shape: this.cup, filename: 'cup', precision: 0.001, adjustYtoZ: false });
+        this.occt.io.saveShapeStl({ shape: this.cup, fileName: 'cup', precision: 0.001, adjustYtoZ: false });
     }
 
     mapRange(value, low1, high1, low2, high2) {

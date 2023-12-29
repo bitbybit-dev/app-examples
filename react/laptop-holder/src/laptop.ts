@@ -134,11 +134,11 @@ export class LaptopLogic {
     }
 
     downloadStep() {
-        this.occt.io.saveShapeSTEP({ shape: this.laptopStand, filename: 'laptop-stand.step', adjustYtoZ: false, });
+        this.occt.io.saveShapeSTEP({ shape: this.laptopStand, fileName: 'laptop-stand.step', adjustYtoZ: false, });
     }
 
     downloadStl() {
-        this.occt.io.saveShapeStl({ shape: this.laptopStand, filename: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
+        this.occt.io.saveShapeStl({ shape: this.laptopStand, fileName: 'laptop-stand', precision: 0.001, adjustYtoZ: false });
     }
 
     async render(laptops: Laptop[]) {

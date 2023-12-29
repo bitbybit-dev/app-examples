@@ -99,7 +99,7 @@ function App() {
         if (bitbybit && vase) {
             bitbybit.occt.io.saveShapeSTEP({
                 shape: vase,
-                filename: 'vase.stp',
+                fileName: 'vase.stp',
                 adjustYtoZ: true
             })
         }

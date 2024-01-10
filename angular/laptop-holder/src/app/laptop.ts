@@ -111,7 +111,9 @@ export class LaptopLogic {
         pointLightConf.intensity = 8000;
         pointLightConf.diffuse = '#3333ff';
         pointLightConf.radius = 0;
-        this.bitbybit.babylon.scene.drawPointLight(pointLightConf);
+        pointLightConf.shadowGeneratorMapSize = 2056;
+        const light = this.bitbybit.babylon.scene.drawPointLight(pointLightConf);
+        light.shadowMinZ = 0.01;
         this.laptopsFilletsMesh = [];
 
 

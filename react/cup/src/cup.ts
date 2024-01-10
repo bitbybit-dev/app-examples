@@ -44,7 +44,7 @@ export class CupLogic {
             enableShadows: true,
             shadowGeneratorMapSize: 2056
         })
-
+        this.pointLight.shadowMinZ = 0.01;
         const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], radius: 20, direction: [0, 1, 0] })
 
         const di = new Inputs.Draw.DrawOcctShapeOptions();

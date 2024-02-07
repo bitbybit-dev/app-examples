@@ -10,7 +10,7 @@
     },
     "private": true,
     "dependencies": {
-        "@bitbybit-dev/core": "0.14.0",
+        "@bitbybit-dev/core": "0.14.3",
         "@angular/animations": "13.3.0",
         "@angular/common": "13.3.0",
         "@angular/compiler": "13.3.0",

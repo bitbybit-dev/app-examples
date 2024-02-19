@@ -4,7 +4,7 @@
     "private": true,
     "homepage": "https://app-store.bitbybit.dev/cup",
     "dependencies": {
-        "@bitbybit-dev/core": "0.14.3",
+        "@bitbybit-dev/core": "0.14.4",
         "@testing-library/jest-dom": "5.16.4",
         "@testing-library/react": "13.1.1",
         "@testing-library/user-event": "14.1.1",

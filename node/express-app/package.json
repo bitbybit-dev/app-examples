@@ -13,7 +13,8 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "@bitbybit-dev/occt": "0.15.7"
+    "@bitbybit-dev/occt": "0.15.9",
+    "@babylonjs/core": "7.2.1"
   },
   "type":"module",
   "devDependencies": {

@@ -3,7 +3,7 @@ import { BitByBitOCCT } from '@bitbybit-dev/occt-worker';
 import { BufferAttribute, BufferGeometry, Group, Mesh, MeshNormalMaterial, Scene } from 'three';
 
 async function visualize(bitbybitOcct: BitByBitOCCT, shape: Inputs.OCCT.TopoDSShapePointer, precision: number) {
-    const geometries: THREE.BufferGeometry[] = []
+    const geometries: BufferGeometry[] = []
     const res: Inputs.OCCT.DecomposedMeshDto = await bitbybitOcct.occt.shapeToMesh({ shape, adjustYtoZ: false, precision });
     let meshData = res.faceList.map(face => {
         return {

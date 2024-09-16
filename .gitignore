@@ -2,3 +2,6 @@ node_modules
 .angular
 .vscode
 dist
+nuxt/basic/pnpm-lock.yaml
+.nuxt
+.output

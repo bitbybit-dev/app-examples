@@ -11,9 +11,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@bitbybit-dev/core": "^0.16.3",
-    "@bitbybit-dev/occt": "^0.16.3",
-    "@bitbybit-dev/occt-worker": "^0.16.3",
+    "@bitbybit-dev/core": "^0.16.5",
+    "@bitbybit-dev/occt": "^0.16.5",
+    "@bitbybit-dev/occt-worker": "^0.16.5",
     "@pinia/nuxt": "^0.5.4",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",

@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /*eslint no-restricted-globals: 0*/
-import initOpenCascade from './bitbybit-nuxt.js';
+import initOpenCascade from "@bitbybit-dev/occt/bitbybit-dev-occt/nuxt.js";
 import type { OpenCascadeInstance } from '@bitbybit-dev/occt/bitbybit-dev-occt/bitbybit-dev-occt.js';
 import { initializationComplete, onMessageInput } from '@bitbybit-dev/occt-worker';
 
@@ -9,6 +9,5 @@ initOpenCascade().then((occ: OpenCascadeInstance) => {
 });
 
 addEventListener('message', ({ data }) => {
-    console.log(data)
     onMessageInput(data, postMessage);
 });

@@ -11,10 +11,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@bitbybit-dev/core": "^0.16.5",
-    "@bitbybit-dev/occt": "^0.16.5",
-    "@bitbybit-dev/occt-worker": "^0.16.5",
+    "@bitbybit-dev/core": "^0.17.0",
+    "@bitbybit-dev/occt": "^0.17.0",
+    "@bitbybit-dev/occt-worker": "^0.17.0",
     "@pinia/nuxt": "^0.5.4",
+    "earcut": "2.2.3",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
     "vue": "latest",

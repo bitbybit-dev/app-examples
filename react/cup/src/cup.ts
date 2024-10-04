@@ -34,16 +34,18 @@ export class CupLogic {
         optionsCamera.wheelPrecision = 1;
         this.bitbybit.babylon.scene.adjustActiveArcRotateCamera(optionsCamera);
 
-        this.pointLight = this.bitbybit.babylon.scene.drawPointLight({
-            position: [10, 20, 10],
-            diffuse: this.white,
-            specular: this.white,
-            intensity: 4000,
-            radius: 0,
-            shadowDarkness: 0,
-            enableShadows: true,
-            shadowGeneratorMapSize: 2056
-        })
+        const optionsLight = new Inputs.BabylonScene.PointLightDto();
+        optionsLight.position = [10, 20, 10];
+        optionsLight.diffuse = this.white;
+        optionsLight.specular = this.white;
+        optionsLight.intensity = 4000;
+        optionsLight.radius = 0;
+        optionsLight.shadowDarkness = 0;
+        optionsLight.enableShadows = true;
+        optionsLight.shadowGeneratorMapSize = 2056;
+
+        this.pointLight = this.bitbybit.babylon.scene.drawPointLight(optionsLight);
+        
         this.pointLight.shadowMinZ = 0.01;
         const ground = await this.bitbybit.occt.shapes.face.createCircleFace({ center: [0, 0, 0], radius: 20, direction: [0, 1, 0] })
 

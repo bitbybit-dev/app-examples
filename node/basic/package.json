@@ -12,7 +12,7 @@
     "license": "MIT",
     "type": "module",
     "dependencies": {
-        "@bitbybit-dev/occt": "0.16.5"
+        "@bitbybit-dev/occt": "0.17.0"
     },
     "devDependencies": {
         "concurrently": "^7.6.0",

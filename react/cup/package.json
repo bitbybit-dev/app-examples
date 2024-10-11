@@ -4,7 +4,7 @@
     "private": true,
     "homepage": "https://app-store.bitbybit.dev/cup",
     "dependencies": {
-        "@bitbybit-dev/core": "0.17.0",
+        "@bitbybit-dev/core": "0.17.1",
         "@testing-library/jest-dom": "5.16.4",
         "@testing-library/react": "13.1.1",
         "@testing-library/user-event": "14.1.1",
@@ -22,8 +22,7 @@
         "@mui/material": "5.6.4",
         "@emotion/react": "11.9.0",
         "@emotion/styled": "11.8.1",
-        "react-app-rewired": "2.2.1",
-        "earcut": "2.2.3"
+        "react-app-rewired": "2.2.1"
     },
     "scripts": {
         "start": "PORT=3001 react-app-rewired start",

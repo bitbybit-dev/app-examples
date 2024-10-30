@@ -1,5 +1,5 @@
 'use client'
-import { BitByBitBase } from "@bitbybit-dev/core";
+import { BitByBitBase } from "@bitbybit-dev/babylonjs";
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Engine, Scene, Color4, ArcRotateCamera, Vector3, HemisphericLight, Light } from "@babylonjs/core";
 import { useEffect, useRef } from "react";

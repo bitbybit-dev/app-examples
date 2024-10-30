@@ -1,4 +1,4 @@
-import { Inputs, BitByBitBase } from "@bitbybit-dev/core";
+import { Inputs, BitByBitBase } from "@bitbybit-dev/babylonjs";
 import { OCCTW } from "@bitbybit-dev/core";
 
 export class LaptopLogic {
@@ -71,13 +71,13 @@ export class LaptopLogic {
             const laptopVisFillet = await this.occt.fillets.filletEdges({ shape: laptopVisModel, radius: 0.2 });
             laptopFillets.push(laptopFillet);
 
-            const di = new Inputs.OCCT.DrawShapeDto(laptopVisFillet);
+            const di = new Inputs.OCCT.DrawShapeDto();
             di.faceOpacity = 0.2;
             di.edgeWidth = 5;
             di.edgeOpacity = 0.6;
             di.edgeColour = this.whiteColor;
             di.faceColour = this.whiteColor;
-            const laptopFilletMesh = await this.occt.drawShape(di);
+            const laptopFilletMesh = await this.bitbybit.draw.drawAnyAsync({entity: laptopVisFillet, options: di});
             this.laptopsFilletsMesh.push(laptopFilletMesh);
         })
 

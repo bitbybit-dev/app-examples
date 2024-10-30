@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BitByBitBase } from '@bitbybit-dev/core';
+import { BitByBitBase } from '@bitbybit-dev/babylonjs';
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Scene, Engine, Color4, HemisphericLight, Vector3, ArcRotateCamera, Light } from '@babylonjs/core';
 import { LaptopLogic, Laptop } from './laptop';

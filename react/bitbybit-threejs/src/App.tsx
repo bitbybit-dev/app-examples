@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { BitByBitOCCT, OccStateEnum } from '@bitbybit-dev/occt-worker';
+import { BitByBitBase } from "@bitbybit-dev/threejs";
+import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import './App.css';
-import { addShapeToScene } from './visualize';
-import { Inputs } from '@bitbybit-dev/occt';
+import { Inputs } from '@bitbybit-dev/threejs';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
 import { Button, createTheme, Slider, ThemeProvider } from '@mui/material';
@@ -32,7 +32,7 @@ function App() {
 
     const [group, setGroup] = useState<Group>();
     const [scene, setScene] = useState<Scene>();
-    const [bitbybit, setBitbybit] = useState<BitByBitOCCT>();
+    const [bitbybit, setBitbybit] = useState<BitByBitBase>();
 
     const [vase, setVase] = useState<Inputs.OCCT.TopoDSShapePointer>();
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -48,7 +48,7 @@ function App() {
         init();
     }, [])
 
-    const createVaseByLoft = async (bitbybit?: BitByBitOCCT, scene?: THREE.Scene) => {
+    const createVaseByLoft = async (bitbybit?: BitByBitBase, scene?: THREE.Scene) => {
         if (scene && bitbybit) {
 
             if (vase) {
@@ -85,11 +85,40 @@ function App() {
             const fillet = await bitbybit.occt.fillets.filletEdges({ shape: shell, radius: 10 });
             const thick = await bitbybit.occt.operations.makeThickSolidSimple({ shape: fillet, offset: -2 })
             const finalVase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
+            const sph = await bitbybit.occt.shapes.solid.createSphere({ radius: 10, center: [0, 0, 0] });
 
-            const group = await addShapeToScene(bitbybit, finalVase, scene, 0.05);
 
+            const jscadGeodesicSphere = await bitbybit.jscad.shapes.geodesicSphere({ center: [15, 35, 4], radius: 12, frequency: 12 });
+            const jscadGeodesicSphere2 = await bitbybit.jscad.shapes.geodesicSphere({ center: [20, 45, 4], radius: 12, frequency: 12 });
+            // const res = await bitbybit.jscad.booleans.union({ meshes: [jscadGeodesicSphere, jscadGeodesicSphere2] });
+
+            console.log(jscadGeodesicSphere);
+            const options = new Inputs.Draw.DrawOcctShapeOptions();
+            options.precision = 0.05;
+            options.drawEdges = true;
+            options.drawFaces = true;
+            options.drawVertices = true;
+            options.drawEdgeIndexes = true;
+            options.edgeIndexHeight = 1;
+            options.edgeIndexColour = "#0000ff";
+            options.vertexSize = 0.1;
+            const group = await bitbybit.draw.drawAnyAsync({ entity: finalVase, options });
+
+            const options2 = new Inputs.Draw.DrawBasicGeometryOptions();
+            const line = bitbybit.line.create({ start: [0, 0, 0], end: [0, 20, 40] });
+            const res = await bitbybit.draw.drawAnyAsync({ entity: line, options: options2 });
+            const x = await bitbybit.draw.drawAnyAsync({ entity: sph, options: options2 });
+            const res2 = await bitbybit.draw.drawAnyAsync({ entity: [0, 50, 0], options: options2 });
+            const crv = bitbybit.verb.curve.createCurveByPoints({ points: [[0, 50, 0], [0, 55, 5], [5, 50, -5]], degree: 2 });
+            const crvDrawn = bitbybit.draw.drawAny({ entity: crv, options: options2 });
+            const pol = await bitbybit.draw.drawAnyAsync({ entity: { points: [[0, 50, 0], [0, 55, 5], [5, 50, -5]], isClosed: true }, options: options2 });
+            const surf = bitbybit.verb.surface.cylinder.create({ radius: 10, height: 20, xAxis: [1, 0, 0], axis: [0, 1, 0], base: [0, 0, 0] });
+            const surfDrawn = bitbybit.draw.drawAny({ entity: surf, options: options2 });
+            console.log(res);
+            console.log(pol);
+            const group2 = await bitbybit.draw.drawAnyAsync({ entity: [jscadGeodesicSphere, jscadGeodesicSphere2], options: options2 });
+            // bitbybit.jscad.downloadSolidSTL({ mesh: res, fileName: 'geodesicSphere.stl' });
             await bitbybit.occt.deleteShapes({ shapes: [wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick] });
-
             setGroup(group);
             setVase(finalVase);
         }
@@ -135,19 +164,23 @@ function App() {
     }, [addRadiusWide, addRadiusNarrow, addTopHeight, addMiddleHeight])
 
     const init = async () => {
-        let bitbybit = new BitByBitOCCT();
+        let bitbybit = new BitByBitBase();
         setBitbybit(bitbybit);
-        const occt = new Worker(new URL('./occ.worker', import.meta.url), { name: 'OCC', type: 'module' })
-        await bitbybit.init(occt);
+
+        const occt = new Worker(new URL('./occ.worker', import.meta.url), { name: 'OCC', type: 'module' });
+        const jscad = new Worker(new URL('./jscad.worker', import.meta.url), { name: 'JSCAD', type: 'module' });
+
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
+        let scene = new THREE.Scene();
+        const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 10);
+        scene.add(light);
+        await bitbybit.init(scene, occt, jscad);
 
         const animation = (time: number) => {
             renderer.render(scene, camera);
             controls.update();
         }
 
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
-
-        let scene = new THREE.Scene();
         setScene(scene);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);

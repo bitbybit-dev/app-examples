@@ -26,7 +26,7 @@
 .explanation {
     position: absolute;
     max-height: 65vh;
-    overflow-y: scroll;
+    overflow-y: hidden;
     pointer-events: all;
     border-radius: 3px;
     left: 40px;

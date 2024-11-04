@@ -1,5 +1,5 @@
 {
-    "name": "bitbybit-threejs",
+    "name": "vase",
     "version": "0.1.0",
     "private": true,
     "homepage": "https://app-store.bitbybit.dev/bitbybit-threejs",
@@ -22,11 +22,12 @@
         "@mui/material": "5.13.3",
         "@emotion/react": "11.11.0",
         "@emotion/styled": "11.11.0",
-        "react-app-rewired": "2.2.1"
+        "react-app-rewired": "2.2.1",
+        "@babel/plugin-proposal-private-property-in-object": "7.21.11"
     },
     "scripts": {
         "start": "REACT_APP_ENVIRONMENT='local' && PORT=3000 react-app-rewired start",
-        "build": "REACT_APP_ENVIRONMENT='production' && react-app-rewired build",
+        "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },

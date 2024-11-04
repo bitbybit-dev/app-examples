@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
 import { BitByBitBase } from "@bitbybit-dev/threejs";
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import './App.css';
@@ -7,7 +6,7 @@ import { Inputs } from '@bitbybit-dev/threejs';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
 import { Button, createTheme, Slider, ThemeProvider } from '@mui/material';
-import { Group, Scene } from 'three';
+import { Color, DirectionalLight, Group, HemisphereLight, Mesh, MeshPhongMaterial, PerspectiveCamera, PlaneGeometry, Scene, Vector3, VSMShadowMap, WebGLRenderer } from 'three';
 import { Download } from '@mui/icons-material';
 
 const theme = createTheme({
@@ -40,15 +39,15 @@ function App() {
     const firstRenderRef = useRef(true);
 
     useEffect(() => {
-        if (process.env.REACT_APP_ENVIRONMENT !== 'production' &&
-            firstRenderRef.current) {
-            firstRenderRef.current = false;
-            return;
-        }
+        // if (process.env.REACT_APP_ENVIRONMENT !== 'production' &&
+        //     firstRenderRef.current) {
+        //     firstRenderRef.current = false;
+        //     return;
+        // }
         init();
     }, [])
 
-    const createVaseByLoft = async (bitbybit?: BitByBitBase, scene?: THREE.Scene) => {
+    const createVaseByLoft = async (bitbybit?: BitByBitBase, scene?: Scene) => {
         if (scene && bitbybit) {
 
             if (vase) {
@@ -94,11 +93,16 @@ function App() {
             options.edgeWidth = 20;
             options.edgeColour = "#000000";
 
-            const mat = new THREE.MeshPhongMaterial({ color: 0x6600ff });
+            const mat = new MeshPhongMaterial({ color: 0x6600ff });
             mat.polygonOffset = true;
             mat.polygonOffsetFactor = 3;
             options.faceMaterial = mat;
             const group = await bitbybit.draw.drawAnyAsync({ entity: finalVase, options });
+            bitbybit.occt.io.saveShapeSTEP({
+                shape: finalVase,
+                fileName: 'vase.stp',
+                adjustYtoZ: true
+            })
 
             await bitbybit.occt.deleteShapes({ shapes: [wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick] });
 
@@ -158,9 +162,9 @@ function App() {
         const occt = new Worker(new URL('./occ.worker', import.meta.url), { name: 'OCC', type: 'module' });
         const jscad = new Worker(new URL('./jscad.worker', import.meta.url), { name: 'JSCAD', type: 'module' });
 
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
-        let scene = new THREE.Scene();
-        const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 10);
+        const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
+        let scene = new Scene();
+        const light = new HemisphereLight(0xffffbb, 0x080820, 10);
         scene.add(light);
         await bitbybit.init(scene, occt, jscad);
 
@@ -170,7 +174,7 @@ function App() {
         }
 
         setScene(scene);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         document.body.appendChild(renderer.domElement);
@@ -179,13 +183,13 @@ function App() {
         camera.position.set(30, 50, 50);
 
         controls.update();
-        controls.target = new THREE.Vector3(0, 20, 0);
+        controls.target = new Vector3(0, 20, 0);
         controls.enableDamping = true;
         controls.dampingFactor = 0.1
         controls.zoomSpeed = 0.1;
 
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.VSMShadowMap;
+        renderer.shadowMap.type = VSMShadowMap;
 
         window.addEventListener("resize", onWindowResize, false);
 
@@ -195,16 +199,16 @@ function App() {
 
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        renderer.setClearColor(new THREE.Color(0x000000), 1);
+        renderer.setClearColor(new Color(0x000000), 1);
 
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {
                 await createVaseByLoft(bitbybit, scene);
 
                 renderer.setAnimationLoop(animation);
-            
 
-                const dirLight = new THREE.DirectionalLight(0xffffff, 50);
+
+                const dirLight = new DirectionalLight(0xffffff, 50);
                 dirLight.position.set(60, 70, -30);
                 dirLight.castShadow = true;
                 dirLight.shadow.camera.near = 0;
@@ -222,10 +226,10 @@ function App() {
 
                 scene.add(dirLight);
 
-                const material = new THREE.MeshPhongMaterial({ color: 0x3300ff })
+                const material = new MeshPhongMaterial({ color: 0x3300ff })
                 material.shininess = 0;
-                material.specular = new THREE.Color(0x222222);
-                const ground = new THREE.Mesh(new THREE.PlaneGeometry(100, 100, 10, 10), material);
+                material.specular = new Color(0x222222);
+                const ground = new Mesh(new PlaneGeometry(100, 100, 10, 10), material);
                 ground.rotateX(-Math.PI / 2);
                 ground.receiveShadow = true;
                 scene.add(ground);
@@ -239,7 +243,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <img className="imageback" src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="image showing the bitbybit threejs 3d printable vase configurator app"></img>
+            <img className="imageback" src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="showing the bitbybit threejs 3d printable vase configurator app"></img>
             <div className="hideMenu">
                 <Button onClick={() => setHideMenu(!hideMenu)} color="primary" variant="contained">{hideMenu ? 'Show menu' : 'Hide menu'}</Button>
             </div>
@@ -273,7 +277,7 @@ function App() {
                             Our github <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev">bitbybit-dev</a>
                         </div>
                         <div className="all-pointer-events">
-                            Apps' <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev/app-examples/tree/main/react/three/vase">Sourcode</a>
+                            Apps' <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev/app-examples/tree/main/react/threejs/vase">Sourcode</a>
                         </div>
                         <br></br>
                         <br></br>

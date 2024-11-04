@@ -85,40 +85,28 @@ function App() {
             const fillet = await bitbybit.occt.fillets.filletEdges({ shape: shell, radius: 10 });
             const thick = await bitbybit.occt.operations.makeThickSolidSimple({ shape: fillet, offset: -2 })
             const finalVase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
-            const sph = await bitbybit.occt.shapes.solid.createSphere({ radius: 10, center: [0, 0, 0] });
 
-
-            const jscadGeodesicSphere = await bitbybit.jscad.shapes.geodesicSphere({ center: [15, 35, 4], radius: 12, frequency: 12 });
-            const jscadGeodesicSphere2 = await bitbybit.jscad.shapes.geodesicSphere({ center: [20, 45, 4], radius: 12, frequency: 12 });
-            // const res = await bitbybit.jscad.booleans.union({ meshes: [jscadGeodesicSphere, jscadGeodesicSphere2] });
-
-            console.log(jscadGeodesicSphere);
             const options = new Inputs.Draw.DrawOcctShapeOptions();
             options.precision = 0.05;
             options.drawEdges = true;
             options.drawFaces = true;
-            options.drawVertices = true;
-            options.drawEdgeIndexes = true;
-            options.edgeIndexHeight = 1;
-            options.edgeIndexColour = "#0000ff";
-            options.vertexSize = 0.1;
+            options.drawVertices = false;
+            options.edgeWidth = 20;
+            options.edgeColour = "#000000";
+
+            const mat = new THREE.MeshPhongMaterial({ color: 0x6600ff });
+            mat.polygonOffset = true;
+            mat.polygonOffsetFactor = 3;
+            options.faceMaterial = mat;
             const group = await bitbybit.draw.drawAnyAsync({ entity: finalVase, options });
 
-            const options2 = new Inputs.Draw.DrawBasicGeometryOptions();
-            const line = bitbybit.line.create({ start: [0, 0, 0], end: [0, 20, 40] });
-            const res = await bitbybit.draw.drawAnyAsync({ entity: line, options: options2 });
-            const x = await bitbybit.draw.drawAnyAsync({ entity: sph, options: options2 });
-            const res2 = await bitbybit.draw.drawAnyAsync({ entity: [0, 50, 0], options: options2 });
-            const crv = bitbybit.verb.curve.createCurveByPoints({ points: [[0, 50, 0], [0, 55, 5], [5, 50, -5]], degree: 2 });
-            const crvDrawn = bitbybit.draw.drawAny({ entity: crv, options: options2 });
-            const pol = await bitbybit.draw.drawAnyAsync({ entity: { points: [[0, 50, 0], [0, 55, 5], [5, 50, -5]], isClosed: true }, options: options2 });
-            const surf = bitbybit.verb.surface.cylinder.create({ radius: 10, height: 20, xAxis: [1, 0, 0], axis: [0, 1, 0], base: [0, 0, 0] });
-            const surfDrawn = bitbybit.draw.drawAny({ entity: surf, options: options2 });
-            console.log(res);
-            console.log(pol);
-            const group2 = await bitbybit.draw.drawAnyAsync({ entity: [jscadGeodesicSphere, jscadGeodesicSphere2], options: options2 });
-            // bitbybit.jscad.downloadSolidSTL({ mesh: res, fileName: 'geodesicSphere.stl' });
             await bitbybit.occt.deleteShapes({ shapes: [wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick] });
+
+            group.children[0].children.forEach((child) => {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            });
+
             setGroup(group);
             setVase(finalVase);
         }
@@ -197,7 +185,7 @@ function App() {
         controls.zoomSpeed = 0.1;
 
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+        renderer.shadowMap.type = THREE.VSMShadowMap;
 
         window.addEventListener("resize", onWindowResize, false);
 
@@ -212,7 +200,36 @@ function App() {
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {
                 await createVaseByLoft(bitbybit, scene);
+
                 renderer.setAnimationLoop(animation);
+            
+
+                const dirLight = new THREE.DirectionalLight(0xffffff, 50);
+                dirLight.position.set(60, 70, -30);
+                dirLight.castShadow = true;
+                dirLight.shadow.camera.near = 0;
+                dirLight.shadow.camera.far = 300;
+                const dist = 100;
+                dirLight.shadow.camera.right = dist;
+                dirLight.shadow.camera.left = - dist;
+                dirLight.shadow.camera.top = dist;
+                dirLight.shadow.camera.bottom = - dist;
+                dirLight.shadow.mapSize.width = 2000;
+                dirLight.shadow.mapSize.height = 2000;
+                dirLight.shadow.blurSamples = 8;
+                dirLight.shadow.radius = 2;
+                dirLight.shadow.bias = -0.0005;
+
+                scene.add(dirLight);
+
+                const material = new THREE.MeshPhongMaterial({ color: 0x3300ff })
+                material.shininess = 0;
+                material.specular = new THREE.Color(0x222222);
+                const ground = new THREE.Mesh(new THREE.PlaneGeometry(100, 100, 10, 10), material);
+                ground.rotateX(-Math.PI / 2);
+                ground.receiveShadow = true;
+                scene.add(ground);
+
                 setShowSpinner(false);
             } else if (s.state === OccStateEnum.computing) {
             } else if (s.state === OccStateEnum.loaded) {
@@ -250,13 +267,13 @@ function App() {
                             Check out our full platform at <a rel="noreferrer" target="_blank" href="https://bitbybit.dev">bitbybit.dev</a>
                         </div>
                         <div className="all-pointer-events">
-                            Npm package used <a rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/@bitbybit-dev/occt-worker">@bitbybit-dev/occt-worker</a>
+                            Npm package used <a rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/@bitbybit-dev/threejs">@bitbybit-dev/threejs</a>
                         </div>
                         <div className="all-pointer-events">
                             Our github <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev">bitbybit-dev</a>
                         </div>
                         <div className="all-pointer-events">
-                            Apps' <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev/app-examples/tree/main/react/bitbybit-threejs">Sourcode</a>
+                            Apps' <a rel="noreferrer" target="_blank" href="https://github.com/bitbybit-dev/app-examples/tree/main/react/three/vase">Sourcode</a>
                         </div>
                         <br></br>
                         <br></br>

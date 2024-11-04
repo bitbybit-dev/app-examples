@@ -34,16 +34,18 @@ function App() {
     const [bitbybit, setBitbybit] = useState<BitByBitBase>();
 
     const [vase, setVase] = useState<Inputs.OCCT.TopoDSShapePointer>();
+    const [shapesToClean, setShapesToClean] = useState<Inputs.OCCT.TopoDSShapePointer[]>([]);
+
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
     const firstRenderRef = useRef(true);
 
     useEffect(() => {
-        // if (process.env.REACT_APP_ENVIRONMENT !== 'production' &&
-        //     firstRenderRef.current) {
-        //     firstRenderRef.current = false;
-        //     return;
-        // }
+        if (process.env.REACT_APP_ENVIRONMENT !== 'production' &&
+            firstRenderRef.current) {
+            firstRenderRef.current = false;
+            return;
+        }
         init();
     }, [])
 
@@ -53,6 +55,7 @@ function App() {
             if (vase) {
                 // delete previous
                 await bitbybit.occt.deleteShape({ shape: vase });
+                await bitbybit.occt.deleteShapes({ shapes: shapesToClean });
             }
 
             const wire1 = await bitbybit.occt.shapes.wire.createCircleWire({
@@ -85,6 +88,8 @@ function App() {
             const thick = await bitbybit.occt.operations.makeThickSolidSimple({ shape: fillet, offset: -2 })
             const finalVase = await bitbybit.occt.fillets.chamferEdges({ shape: thick, distance: 0.3 });
 
+            setShapesToClean([wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick]);
+
             const options = new Inputs.Draw.DrawOcctShapeOptions();
             options.precision = 0.05;
             options.drawEdges = true;
@@ -93,18 +98,13 @@ function App() {
             options.edgeWidth = 20;
             options.edgeColour = "#000000";
 
+
             const mat = new MeshPhongMaterial({ color: 0x6600ff });
             mat.polygonOffset = true;
             mat.polygonOffsetFactor = 3;
             options.faceMaterial = mat;
             const group = await bitbybit.draw.drawAnyAsync({ entity: finalVase, options });
-            bitbybit.occt.io.saveShapeSTEP({
-                shape: finalVase,
-                fileName: 'vase.stp',
-                adjustYtoZ: true
-            })
 
-            await bitbybit.occt.deleteShapes({ shapes: [wire1, wire2, wire3, wire4, loft, loftFace, baseFace, shell, fillet, thick] });
 
             group.children[0].children.forEach((child) => {
                 child.castShadow = true;
@@ -113,16 +113,18 @@ function App() {
 
             setGroup(group);
             setVase(finalVase);
+
         }
     }
 
-    const downloadStep = () => {
+    const downloadStep = async () => {
         if (bitbybit && vase) {
-            bitbybit.occt.io.saveShapeSTEP({
+            await bitbybit.occt.io.saveShapeSTEP({
                 shape: vase,
                 fileName: 'vase.stp',
-                adjustYtoZ: true
-            })
+                adjustYtoZ: true,
+                tryDownload: true
+            });
         }
     }
 
@@ -157,7 +159,6 @@ function App() {
 
     const init = async () => {
         let bitbybit = new BitByBitBase();
-        setBitbybit(bitbybit);
 
         const occt = new Worker(new URL('./occ.worker', import.meta.url), { name: 'OCC', type: 'module' });
         const jscad = new Worker(new URL('./jscad.worker', import.meta.url), { name: 'JSCAD', type: 'module' });
@@ -167,6 +168,7 @@ function App() {
         const light = new HemisphereLight(0xffffbb, 0x080820, 10);
         scene.add(light);
         await bitbybit.init(scene, occt, jscad);
+        setBitbybit(bitbybit);
 
         const animation = (time: number) => {
             renderer.render(scene, camera);
@@ -199,7 +201,7 @@ function App() {
 
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        renderer.setClearColor(new Color(0x000000), 1);
+        renderer.setClearColor(new Color(0x222222), 1);
 
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {

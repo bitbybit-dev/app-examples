@@ -6,7 +6,7 @@ This application demonstrates the basic setup that can be used to build 3D react
 
 # Run Live Demo Page
 https://app-store.bitbybit.dev/vase  
-Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/threejs/ 
+Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/threejs/vase 
 
 <img src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="ThreeJS Vase Configurator">
 

@@ -5,14 +5,18 @@
 This application demonstrates the basic setup that can be used to build 3D react apps by using Bit By Bit Developers libraries and THREEJS web based game engine.
 
 # Run Live Demo Page
-https://app-store.bitbybit.dev/bitbybit-threejs  
-Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/bitbybit-threejs   
+https://app-store.bitbybit.dev/vase  
+Github Source Code - https://github.com/bitbybit-dev/app-examples/tree/main/react/threejs/ 
 
 <img src="https://app.bitbybit.dev/assets/bitbybit-threejs.png" alt="ThreeJS Vase Configurator">
 
 Visit https://bitbybit.dev to use our full cloud platform.
 
 # NPM Libraries Used    
+ThreeJS        
+https://www.npmjs.com/package/@bitbybit-dev/threejs     
+Core        
+https://www.npmjs.com/package/@bitbybit-dev/core     
 OCCT        
 https://www.npmjs.com/package/@bitbybit-dev/occt     
 OCCT WebWorker      

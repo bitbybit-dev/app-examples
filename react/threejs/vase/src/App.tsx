@@ -176,8 +176,8 @@ function App() {
         }
 
         setScene(scene);
-        const renderer = new WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        const renderer = new WebGLRenderer({ antialias: true, });
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
 
         document.body.appendChild(renderer.domElement);
 
@@ -199,7 +199,7 @@ function App() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
 
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight, false);
         }
         renderer.setClearColor(new Color(0x222222), 1);
 

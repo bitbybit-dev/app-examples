@@ -9,6 +9,28 @@ import { GUI } from 'lil-gui';
 
 function component() {
 
+    const showSpinner = () => {
+        const element = document.createElement('div');
+        element.id = "spinner";
+        element.className = "lds-ellipsis";
+        element.innerHTML = `
+            <div></div>
+            <div></div>
+            <div></div>
+        `;
+
+        document.body.appendChild(
+            element
+        );
+    }
+
+    const hideSpinner = () => {
+        const el = document.getElementById('spinner');
+        if (el) {
+            el.remove();
+        }
+    }
+
     let current: { group: Group | undefined, ground: Mesh | undefined, gui: GUI | undefined } = {
         group: undefined,
         ground: undefined,
@@ -24,8 +46,6 @@ function component() {
         color: string,
         downloadSTL?: () => void,
         downloadStep?: () => void
-        goHome?: () => void
-        goBitbybit?: () => void
     }
 
     const model = {
@@ -75,13 +95,12 @@ function component() {
             subdivideOptions.offsetFromBorderV = 0.01;
 
             const withHoles = await bitbybit.occt.shapes.face.subdivideToRectangleHoles(subdivideOptions);
-            const finalShape = await bitbybit.occt.operations.makeThickSolidSimple({ shape: withHoles[0], offset: 0.5 });
-            // const box = await bitbybit.occt.shapes.solid.createBox({ width: 1, height: 10, length: 1, center: [0, 0, 0] });
+            finalShape = await bitbybit.occt.operations.makeThickSolidSimple({ shape: withHoles[0], offset: 0.5 });
 
             shapesToClean = [...wires, loft, translated, ...faces, ...withHoles, finalShape];
 
             const options = new Inputs.Draw.DrawOcctShapeOptions();
-            options.precision = 0.05;
+            options.precision = 0.02;
             options.drawEdges = model.drawEdges;
             options.drawFaces = model.drawFaces;
             options.drawVertices = false;
@@ -101,7 +120,6 @@ function component() {
 
             current.group = group;
 
-            finalShape;
         }
     }
 
@@ -109,7 +127,7 @@ function component() {
         if (bitbybit && finalShape) {
             await bitbybit.occt.io.saveShapeSTEP({
                 shape: finalShape,
-                fileName: 'vase.stp',
+                fileName: 'shape.stp',
                 adjustYtoZ: true,
                 tryDownload: true
             });
@@ -134,15 +152,18 @@ function component() {
     model.downloadStep = downloadStep;
 
     const updateShape = async () => {
-        toggleInputs();
+        showSpinner();
+        disableGUI();
         current.group?.traverse((obj) => {
             scene?.remove(obj);
         });
         await createShape(bitbybit, scene);
-        toggleInputs();
+        enableGUI();
+        hideSpinner();
     }
 
     const init = async () => {
+        showSpinner();
         bitbybit = new BitByBitBase();
 
         const domNode = document.getElementById('three-canvas') as HTMLCanvasElement;
@@ -150,7 +171,7 @@ function component() {
 
         const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
         scene = new Scene();
-        scene.fog = new Fog(0xffffff, 15, 60);
+        scene.fog = new Fog(0x1a1c1f, 15, 60);
         const light = new HemisphereLight(0xffffff, 0x000000, 10);
         scene.add(light);
         await bitbybit.init(scene, occt, undefined);
@@ -159,8 +180,7 @@ function component() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        // renderer.setSize(domNode.clientWidth, domNode.clientHeight);
-
+        renderer.setPixelRatio(window.devicePixelRatio / 1.5)
         const animation = (time: number) => {
             renderer.render(scene, camera);
             rotateGroup();
@@ -168,7 +188,7 @@ function component() {
         }
 
         const controls = new OrbitControls(camera, renderer.domElement);
-        camera.position.set(10, 10, 30);
+        camera.position.set(10, 10, 20);
 
         controls.update();
         controls.target = new Vector3(0, 5, 0);
@@ -186,7 +206,7 @@ function component() {
         }
         window.addEventListener("resize", onWindowResize, false);
 
-        renderer.setClearColor(new Color(0xffffff), 1);
+        renderer.setClearColor(new Color(0x1a1c1f), 1);
 
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {
@@ -222,15 +242,21 @@ function component() {
                 scene.add(ground);
 
                 createGui();
+                hideSpinner();
             }
         });
     }
 
-    const toggleInputs = () => {
-        const allInputs = document.getElementsByTagName('input');
-        for (let i = 0; i < allInputs.length; i++) {
-            allInputs[i].disabled = !allInputs[i].disabled;
-        }
+    const disableGUI = () => {
+        const lilGui = document.getElementsByClassName('lil-gui')[0] as HTMLElement;
+        lilGui.style.pointerEvents = "none";
+        lilGui.style.opacity = "0.5";
+    }
+
+    const enableGUI = () => {
+        const lilGui = document.getElementsByClassName('lil-gui')[0] as HTMLElement;
+        lilGui.style.pointerEvents = "all";
+        lilGui.style.opacity = "1";
     }
 
     const createGui = () => {
@@ -238,14 +264,6 @@ function component() {
         const gui = new GUI();
         current.gui = gui;
         gui.$title.innerHTML = "Pattern";
-        model.goHome = () => {
-            window.location.href = "/";
-            gui.destroy();
-        };
-        model.goBitbybit = () => {
-            window.location.href = "https://bitbybit.dev";
-            gui.destroy();
-        };
 
         gui
             .add(model, "uRec", 4, 32, 4)
@@ -301,12 +319,10 @@ function component() {
 
         gui.add(model, "downloadSTL").name("Download STL");
         gui.add(model, "downloadStep").name("Download STEP");
-        gui.add(model, "goHome").name("Examples");
-        gui.add(model, "goBitbybit").name("Bitbybit.dev");
     }
 
     init();
-    
+
 }
 
 component();

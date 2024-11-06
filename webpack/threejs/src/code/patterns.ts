@@ -1,63 +1,52 @@
-import React, { useEffect, useRef, useState } from 'react';
+
 import { BitByBitBase } from "@bitbybit-dev/threejs";
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Inputs } from '@bitbybit-dev/threejs';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
 import { Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshPhongMaterial, PerspectiveCamera, PlaneGeometry, Scene, Vector3, VSMShadowMap, WebGLRenderer } from 'three';
-import { checkFirstRender } from '../first-render';
 import { GUI } from 'lil-gui';
-import { useNavigate } from "react-router-dom";
 
-let current: { group: Group | undefined, ground: Mesh | undefined } = {
-    group: undefined,
-    ground: undefined
-};
+function component() {
 
-type Model = {
-    uRec: number,
-    vRec: number,
-    rounding: number,
-    drawEdges: boolean,
-    drawFaces: boolean,
-    color: string,
-    downloadSTL?: () => void,
-    downloadStep?: () => void
-    goHome?: () => void
-    goBitbybit?: () => void
-}
+    let current: { group: Group | undefined, ground: Mesh | undefined, gui: GUI | undefined } = {
+        group: undefined,
+        ground: undefined,
+        gui: undefined,
+    };
 
-function Pattern() {
+    type Model = {
+        uRec: number,
+        vRec: number,
+        rounding: number,
+        drawEdges: boolean,
+        drawFaces: boolean,
+        color: string,
+        downloadSTL?: () => void,
+        downloadStep?: () => void
+        goHome?: () => void
+        goBitbybit?: () => void
+    }
 
-    const navigate = useNavigate();
-
-    const [group, setGroup] = useState<Group | undefined>();
-    const [scene, setScene] = useState<Scene | undefined>();
-
-    const [bitbybit, setBitbybit] = useState<BitByBitBase>();
-    const [shape, setShape] = useState<Inputs.OCCT.TopoDSShapePointer>();
-    const [shapesToClean, setShapesToClean] = useState<Inputs.OCCT.TopoDSShapePointer[]>([]);
-    const [showSpinner, setShowSpinner] = useState<boolean>(true);
-    const [model, setModel] = useState<Model>({
+    const model = {
         uRec: 16,
         vRec: 16,
         rounding: 0.5,
         drawEdges: true,
         drawFaces: true,
         color: '#6600ff'
-    });
+    } as Model;
+
+    let shapesToClean: Inputs.OCCT.TopoDSShapePointer[] = [];
+    let finalShape: Inputs.OCCT.TopoDSShapePointer | undefined;
+    let bitbybit: BitByBitBase | undefined;
+    let scene: Scene | undefined;
 
     const rotateGroup = () => {
         if (current.group) {
             current.group.rotation.y += 0.001;
         }
     }
-
-    const firstRenderRef = useRef(true);
-
-    useEffect(() => {
-        checkFirstRender(firstRenderRef, init);
-    }, [])
 
     const createShape = async (bitbybit?: BitByBitBase, scene?: Scene) => {
         if (scene && bitbybit) {
@@ -89,7 +78,7 @@ function Pattern() {
             const finalShape = await bitbybit.occt.operations.makeThickSolidSimple({ shape: withHoles[0], offset: 0.5 });
             // const box = await bitbybit.occt.shapes.solid.createBox({ width: 1, height: 10, length: 1, center: [0, 0, 0] });
 
-            setShapesToClean([...wires, loft, translated, ...faces, ...withHoles, finalShape]);
+            shapesToClean = [...wires, loft, translated, ...faces, ...withHoles, finalShape];
 
             const options = new Inputs.Draw.DrawOcctShapeOptions();
             options.precision = 0.05;
@@ -112,15 +101,14 @@ function Pattern() {
 
             current.group = group;
 
-            setGroup(group);
-            setShape(finalShape);
+            finalShape;
         }
     }
 
     const downloadStep = async () => {
-        if (bitbybit && shape) {
+        if (bitbybit && finalShape) {
             await bitbybit.occt.io.saveShapeSTEP({
-                shape: shape,
+                shape: finalShape,
                 fileName: 'vase.stp',
                 adjustYtoZ: true,
                 tryDownload: true
@@ -142,115 +130,30 @@ function Pattern() {
         }
     }
 
-    model.downloadSTL = () => {
-        downloadSTL()
-    };
-
-    model.downloadStep = () => {
-        downloadStep()
-    };
+    model.downloadSTL = downloadSTL;
+    model.downloadStep = downloadStep;
 
     const updateShape = async () => {
-        setShowSpinner(true);
-        group?.traverse((obj) => {
+        toggleInputs();
+        current.group?.traverse((obj) => {
             scene?.remove(obj);
         });
         await createShape(bitbybit, scene);
-        setShowSpinner(false);
-    }
-
-    useEffect(() => {
-        if (scene && bitbybit) {
-            updateShape();
-        }
-    }, [model])
-
-    const createGui = () => {
-
-        const gui = new GUI();
-        gui.$title.innerHTML = "Pattern";
-        model.goHome = () => {
-            navigate('/threejs-library');
-            gui.destroy();
-        };
-        model.goBitbybit = () => {
-            window.location.href = "https://bitbybit.dev";
-            gui.destroy();
-        };
-
-        gui
-            .add(model, "uRec", 4, 32, 4)
-            .name("Rectangles U")
-            .onFinishChange((value: number) => {
-                model.uRec = value;
-                setModel({ ...model });
-            });
-
-        gui
-            .add(model, "vRec", 4, 32, 4)
-            .name("Rectangles V")
-            .onFinishChange((value: number) => {
-                model.vRec = value;
-                setModel({ ...model });
-            });
-
-        gui
-            .add(model, "rounding", 0.1, 0.9, 0.01)
-            .name("Rounding")
-            .onFinishChange((value: number) => {
-                model.rounding = value;
-                setModel({ ...model });
-            });
-
-        gui
-            .add(model, "drawEdges")
-            .name("Draw Edges")
-            .onFinishChange((value: boolean) => {
-                model.drawEdges = value;
-                setModel({ ...model });
-            });
-
-        gui
-            .add(model, "drawFaces")
-            .name("Draw Faces")
-            .onFinishChange((value: boolean) => {
-                model.drawFaces = value;
-                setModel({ ...model });
-            });
-
-        gui
-            .addColor(model, "color")
-            .name("Color")
-            .onChange((value: string) => {
-                const children = current.group?.children[0].children as Mesh[];
-                [...children, current.ground].forEach((child) => {
-                    const material = (child as Mesh).material as MeshPhongMaterial;
-                    material.color.setHex(parseInt(value.replace('#', '0x')));
-                });
-
-            })
-
-        gui.add(model, "downloadSTL").name("Download STL");
-        gui.add(model, "downloadStep").name("Download STEP");
-        gui.add(model, "goHome").name("Examples");
-        gui.add(model, "goBitbybit").name("Bitbybit.dev");
+        toggleInputs();
     }
 
     const init = async () => {
-        let bitbybit = new BitByBitBase();
+        bitbybit = new BitByBitBase();
 
         const domNode = document.getElementById('three-canvas') as HTMLCanvasElement;
         const occt = new Worker(new URL('../occ.worker', import.meta.url), { name: 'OCC', type: 'module' });
 
         const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
-        let scene = new Scene();
+        scene = new Scene();
         scene.fog = new Fog(0xffffff, 15, 60);
         const light = new HemisphereLight(0xffffff, 0x000000, 10);
         scene.add(light);
         await bitbybit.init(scene, occt, undefined);
-        setBitbybit(bitbybit);
-
-        setScene(scene);
 
         const renderer = new WebGLRenderer({ antialias: true, canvas: domNode });
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -319,24 +222,91 @@ function Pattern() {
                 scene.add(ground);
 
                 createGui();
-
-                setShowSpinner(false);
             }
         });
     }
 
-    return (
-        <>
-            {showSpinner &&
-                <div className="lds-ellipsis">
-                    <div></div><div></div><div></div><div></div>
-                </div>
-            }
-            <canvas id="three-canvas">
-            </canvas>
-        </>
-    )
+    const toggleInputs = () => {
+        const allInputs = document.getElementsByTagName('input');
+        for (let i = 0; i < allInputs.length; i++) {
+            allInputs[i].disabled = !allInputs[i].disabled;
+        }
+    }
 
+    const createGui = () => {
+
+        const gui = new GUI();
+        current.gui = gui;
+        gui.$title.innerHTML = "Pattern";
+        model.goHome = () => {
+            window.location.href = "/";
+            gui.destroy();
+        };
+        model.goBitbybit = () => {
+            window.location.href = "https://bitbybit.dev";
+            gui.destroy();
+        };
+
+        gui
+            .add(model, "uRec", 4, 32, 4)
+            .name("Rectangles U")
+            .onFinishChange((value: number) => {
+                model.uRec = value;
+                updateShape();
+            });
+
+        gui
+            .add(model, "vRec", 4, 32, 4)
+            .name("Rectangles V")
+            .onFinishChange((value: number) => {
+                model.vRec = value;
+                updateShape();
+            });
+
+        gui
+            .add(model, "rounding", 0.1, 0.9, 0.01)
+            .name("Rounding")
+            .onFinishChange((value: number) => {
+                model.rounding = value;
+                updateShape();
+            });
+
+        gui
+            .add(model, "drawEdges")
+            .name("Draw Edges")
+            .onFinishChange((value: boolean) => {
+                model.drawEdges = value;
+                updateShape();
+            });
+
+        gui
+            .add(model, "drawFaces")
+            .name("Draw Faces")
+            .onFinishChange((value: boolean) => {
+                model.drawFaces = value;
+                updateShape();
+            });
+
+        gui
+            .addColor(model, "color")
+            .name("Color")
+            .onChange((value: string) => {
+                const children = current.group?.children[0].children as Mesh[];
+                [...children, current.ground].forEach((child) => {
+                    const material = (child as Mesh).material as MeshPhongMaterial;
+                    material.color.setHex(parseInt(value.replace('#', '0x')));
+                });
+
+            })
+
+        gui.add(model, "downloadSTL").name("Download STL");
+        gui.add(model, "downloadStep").name("Download STEP");
+        gui.add(model, "goHome").name("Examples");
+        gui.add(model, "goBitbybit").name("Bitbybit.dev");
+    }
+
+    init();
+    
 }
 
-export default Pattern;
+component();

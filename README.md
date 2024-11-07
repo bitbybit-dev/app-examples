@@ -21,7 +21,7 @@ https://www.npmjs.com/package/@bitbybit-dev/threejs
 CORE   
 https://www.npmjs.com/package/@bitbybit-dev/core   
 OCCT WORKER   
-https://www.npmjs.com/package/@bitbybit-dev/occt-worker 
+https://www.npmjs.com/package/@bitbybit-dev/occt-worker   
 OCCT   
 https://www.npmjs.com/package/@bitbybit-dev/occt   
 

@@ -63,9 +63,6 @@ BABYLONJS: https://app-store.bitbybit.dev/terrace-furniture
 
 <img src="https://app.bitbybit.dev/assets/terrace.png" alt="Terrace Furniture Configurator">
 
-# Build package
-tsc -p tsconfig.bitbybit.json  
-
 # Media Channels
 Discord: https://discord.gg/GSe3VMe  
 Youtube: https://www.youtube.com/@bitbybitdev?sub_confirmation=1  

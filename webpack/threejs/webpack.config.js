@@ -6,7 +6,8 @@ module.exports = {
     entry: {
         index: './src/index.ts',
         patterns: './src/code/patterns.ts',
-        cupthree: './src/code/cup-three.ts'
+        cupthree: './src/code/cup-three.ts',
+        manifoldSlicedMesh: './src/code/manifold-sliced-mesh.ts',
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -37,7 +38,15 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.wasm$/,
+                test: /manifold.wasm$/,
+                type: "javascript/auto",
+                loader: "file-loader",
+                options: {
+                    name: "static/js/[name]-3-0-0.wasm",
+                },
+            },
+            {
+                test: /bitbybit-dev-occt.wasm$/,
                 type: "javascript/auto",
                 loader: "file-loader",
                 options: {
@@ -65,7 +74,8 @@ module.exports = {
             path: false,
             worker_threads: false,
             crypto: false,
-            stream: false
+            stream: false,
+            module: false,
         }
     },
     output: {

@@ -174,7 +174,7 @@ function component() {
         scene.fog = new Fog(0x1a1c1f, 15, 60);
         const light = new HemisphereLight(0xffffff, 0x000000, 10);
         scene.add(light);
-        await bitbybit.init(scene, occt, undefined);
+        await bitbybit.init(scene, occt);
 
         const renderer = new WebGLRenderer({ antialias: true, canvas: domNode });
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -208,38 +208,39 @@ function component() {
 
         renderer.setClearColor(new Color(0x1a1c1f), 1);
 
+        const dirLight = new DirectionalLight(0xffffff, 50);
+        dirLight.position.set(60, 70, -30);
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.near = 0;
+        dirLight.shadow.camera.far = 300;
+        const dist = 100;
+        dirLight.shadow.camera.right = dist;
+        dirLight.shadow.camera.left = - dist;
+        dirLight.shadow.camera.top = dist;
+        dirLight.shadow.camera.bottom = - dist;
+        dirLight.shadow.mapSize.width = 3000;
+        dirLight.shadow.mapSize.height = 3000;
+        dirLight.shadow.blurSamples = 8;
+        dirLight.shadow.radius = 2;
+        dirLight.shadow.bias = -0.0005;
+
+        scene.add(dirLight);
+
+        const material = new MeshPhongMaterial({ color: 0x3300ff })
+        material.shininess = 0;
+        material.specular = new Color(0x222222);
+        const ground = new Mesh(new PlaneGeometry(50, 50, 1, 1), material);
+        ground.rotateX(-Math.PI / 2);
+        ground.receiveShadow = true;
+        current.ground = ground;
+        scene.add(ground);
+
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
             if (s.state === OccStateEnum.initialised) {
                 await createShape(bitbybit, scene);
 
                 renderer.setAnimationLoop(animation);
 
-                const dirLight = new DirectionalLight(0xffffff, 50);
-                dirLight.position.set(60, 70, -30);
-                dirLight.castShadow = true;
-                dirLight.shadow.camera.near = 0;
-                dirLight.shadow.camera.far = 300;
-                const dist = 100;
-                dirLight.shadow.camera.right = dist;
-                dirLight.shadow.camera.left = - dist;
-                dirLight.shadow.camera.top = dist;
-                dirLight.shadow.camera.bottom = - dist;
-                dirLight.shadow.mapSize.width = 3000;
-                dirLight.shadow.mapSize.height = 3000;
-                dirLight.shadow.blurSamples = 8;
-                dirLight.shadow.radius = 2;
-                dirLight.shadow.bias = -0.0005;
-
-                scene.add(dirLight);
-
-                const material = new MeshPhongMaterial({ color: 0x3300ff })
-                material.shininess = 0;
-                material.specular = new Color(0x222222);
-                const ground = new Mesh(new PlaneGeometry(50, 50, 1, 1), material);
-                ground.rotateX(-Math.PI / 2);
-                ground.receiveShadow = true;
-                current.ground = ground;
-                scene.add(ground);
 
                 createGui();
                 hideSpinner();

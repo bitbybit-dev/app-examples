@@ -55,7 +55,7 @@ function component() {
 
     const rotateGroup = () => {
         if (current.group) {
-            current.group.rotation.y += 0.001;
+            current.group.rotation.y += 0.005;
         }
     }
 
@@ -122,7 +122,6 @@ function component() {
     }
 
     const updateShape = async () => {
-        console.log("UPDATE TRIGGERED")
         showSpinner();
         disableGUI();
         current.group?.traverse((obj) => {
@@ -209,7 +208,6 @@ function component() {
 
         bitbybit.manifoldWorkerManager.manifoldWorkerState$.subscribe(async s => {
             if (s.state === ManifoldStateEnum.initialised) {
-                console.log("INITIALISED");
                 await createShape(bitbybit, scene);
 
                 renderer.setAnimationLoop(animation);

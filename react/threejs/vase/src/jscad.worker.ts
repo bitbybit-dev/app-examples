@@ -1,13 +1,13 @@
 /// <reference lib="webworker" />
-/*eslint no-restricted-globals: 0*/
 
-import { Workers } from '@bitbybit-dev/core';
+import { initializationComplete, onMessageInput } from '@bitbybit-dev/jscad-worker';
 
-import('@bitbybit-dev/core/jscad-generated')
+import('@bitbybit-dev/jscad/jscad-generated')
     .then((s) => {
-        Workers.initializationComplete(s.default());
+        initializationComplete(s.default());
     });
-
+    
+// eslint-disable-next-line no-restricted-globals
 addEventListener('message', ({ data }) => {
-    Workers.onMessageInput(data, postMessage);
+    onMessageInput(data, postMessage);
 });

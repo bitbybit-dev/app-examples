@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
         content="This example shows how you can write actual bitbybit javascript code by using the bitbybit-runner. Example creates 3D CAD model of the slide, enables physics and creates basic UI. Users can run the Havok physics simulation.">
-    <script src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.18.0/runner/bitbybit-runner.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.0/runner/bitbybit-runner.js"></script>
     <script>
         // Timeout is needed for HTML to have time to finish rendering. This also makes sure that myCanvas actually can be found
         setTimeout(async () => {
@@ -19,6 +19,7 @@
                 enablePhysics: true,
                 enableOCCT: true,
                 enableJSCAD: false,
+                enableManifold: false,
                 enableKeyEventListeners: false,
                 loadFonts: ['Roboto'],
             };

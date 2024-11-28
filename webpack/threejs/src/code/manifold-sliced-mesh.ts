@@ -72,10 +72,11 @@ function component() {
                 circularSegments: 32,
             });
 
+            // max has small tolerance so that strict steps would fit the interval till last item
             const span = bitbybit.vector.span({
                 step: model.sphereRadius * 2 / (model.nrSubdivisions + 1),
                 min: -model.sphereRadius,
-                max: model.sphereRadius,
+                max: model.sphereRadius + 0.000001,
             });
 
             const slicedManifolds = await manifold.booleans.splitByPlaneOnOffsets({

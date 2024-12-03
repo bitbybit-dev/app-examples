@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <title>Runner Coding Example - Bit By Bit Developers</title>
+    <title>Bitbybit Runner THREEJS Lite Coding Example - Initiate Scene & Camera In Runner</title>
     <base href="/">
     <link rel="icon" type="image/x-icon" href="https://bitbybit.dev/assets/favicon.png">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="This example shows how you can write actual bitbybit javascript code by using the bitbybit-runner. Example creates 3D CAD model of the slide, enables physics and creates basic UI. Users can run the Havok physics simulation.">
-        <script defer src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.0-patch.0/runner/threejs/bitbybit-runner-lite-threejs.js"></script>
+        content="This example shows how to import Lite version of bitbybit runner for threejs and initiate scene with a single call to runner. This lite version requires THREEJS to be loaded separately. Lite version of bitbybit-dev bundle is smaller.">
+
     <script type="importmap">
             {
               "imports": {
@@ -24,7 +24,8 @@
         window.THREEJS = THREEJS;
         window.OrbitControls = OrbitControls;
     </script>
-    <script defer src="https://ik.imagekit.io/bitbybit/app/bitbybit-runner-lite-threejs.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.0-patch.0/runner/threejs/bitbybit-runner-lite-threejs.js"></script>
     <script type="module">
 
         const runnerOptions = {
@@ -169,14 +170,15 @@
             <img alt="Logo of Bit by bit developers company" src="https://bitbybit.dev/assets/logo-gold-small.png" />
             <div>bitbybit.dev</div>
         </a>
-        <h1>Runner Example - JavaScript Coding</h1>
+        <h1>Bitbybit Runner THREEJS Lite Coding Example - Initiate Scene & Camera In Runner</h1>
         <div class="myCanvasZone">
             <canvas id="myCanvas"></canvas>
         </div>
-        <a href="https://bitbybit.dev/projects/public/UwnghvO89ocgFv5U3P4m/script/sWwcLOMIjUpdigPv315i/script-3d-slide-with-physics-in-project-3d-slide-from-wire-offsets-by-author-matas"
-            target="_blank" rel="noopener noreferrer">
-            This example is based on the project that was coded in TypeScript on bitbybit.dev Monaco editor.
-        </a>
+        <p>
+            This example shows how to import Lite version of bitbybit runner for threejs and initiate scene with a
+            single call to runner. This lite version requires THREEJS to be loaded separately. Lite version of
+            bitbybit-dev bundle is smaller than non-lite.
+        </p>
     </div>
 </body>
 

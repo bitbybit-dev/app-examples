@@ -8,6 +8,7 @@ module.exports = {
         patterns: './src/code/patterns.ts',
         cupthree: './src/code/cup-three.ts',
         manifoldSlicedMesh: './src/code/manifold-sliced-mesh.ts',
+        homepage: './src/code/homepage.ts',
     },
     devtool: 'inline-source-map',
     devServer: {

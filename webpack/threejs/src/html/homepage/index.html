@@ -26,9 +26,31 @@
     <script defer="defer" src="../homepage.0.19.0.bundle.js"></script>
     <style>
         body {
-            background-color: rgba(0,0,0,0);
+            background-color: rgba(0, 0, 0, 0);
             margin: 0px;
             color: #ffffff;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        .top-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1920px;
+            z-index: 1;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        .bottom-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1920px;
+            z-index: -1;
+            overflow-y: hidden;
+            overflow-x: hidden;
         }
 
         a {
@@ -130,12 +152,40 @@
                 transform: translate(19px, 0);
             }
         }
+
+        .lil-gui {
+            --background-color: #000;
+            --number-color: #f0cebb;
+            --string-color: #f0cebb;
+            --text-color: #f0cebb;
+            /* --widget-color: #0af; */
+            --padding: 5px;
+        }
+
+        .signup {
+            z-index: 2;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 520px;
+            height: 420px;
+            background-color: rgba(0, 0, 0, 0);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
 <body>
+    <a href="https://bitbybit.dev/auth/sign-up" class="signup"></a>
+    <img class="top-img" src="https://app.bitbybit.dev/assets/homepage/lg/parametric-design-top.png" />
     <canvas id="three-canvas">
     </canvas>
+    <img class="bottom-img" src="https://app.bitbybit.dev/assets/homepage/lg/parametric-design-bottom.png" />
 </body>
 
 </html>

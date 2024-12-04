@@ -3,7 +3,7 @@ import { BitByBitBase } from "@bitbybit-dev/threejs";
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import { Inputs } from '@bitbybit-dev/threejs';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshPhongMaterial, PerspectiveCamera, PlaneGeometry, Scene, Vector3, VSMShadowMap, WebGLRenderer } from 'three';
+import { Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshPhongMaterial, MeshPhysicalMaterial, PerspectiveCamera, PlaneGeometry, Scene, Vector3, VSMShadowMap, WebGLRenderer } from 'three';
 import { GUI } from 'lil-gui';
 
 function component() {
@@ -23,6 +23,9 @@ function component() {
         );
     }
 
+    let mouseX = 0;
+    let mouseY = 0;
+
     const hideSpinner = () => {
         const el = document.getElementById('spinner');
         if (el) {
@@ -37,14 +40,18 @@ function component() {
 
     type Model = {
         numberOfRays: number,
-        nrSubdivisions: number,
+        widening: number,
         color: string,
+        sourceCode: () => void
     }
 
     const model = {
         numberOfRays: 200,
-        nrSubdivisions: 1,
-        color: '#0f0f0f'
+        widening: 3,
+        color: '#be8250',
+        sourceCode: () => {
+            window.open("https://github.com/bitbybit-dev/app-examples/blob/main/webpack/threejs/src/code/homepage.ts", "_blank");
+        }
     } as Model;
 
     let shapesToClean: Inputs.OCCT.TopoDSShapePointer[] = [];
@@ -54,7 +61,8 @@ function component() {
 
     const rotateGroup = () => {
         if (current.group) {
-            current.group.rotation.y += 0.005;
+            current.group.rotation.y -= ((window.innerWidth / 2) - mouseX) / 300000;
+            current.group.rotation.z -= ((window.innerHeight / 2) - mouseY) / 300000;
         }
     }
 
@@ -68,8 +76,8 @@ function component() {
             const spiralOptions = new Inputs.Point.SpiralDto();
             spiralOptions.phi = 0.9;
             spiralOptions.numberPoints = model.numberOfRays;
-            spiralOptions.widening = 3;
-            spiralOptions.radius = 6;
+            spiralOptions.widening = model.widening;
+            spiralOptions.radius = 10;
             spiralOptions.factor = 1;
             const spiralPoints = bitbybit.point.spiral(spiralOptions)
 
@@ -84,7 +92,7 @@ function component() {
 
             const pointsAtParam = bitbybit.verb.curve.pointsAtParam({
                 curves: rays,
-                parameter: 0.4
+                parameter: 0.3
             });
 
             const spiralingLineCurves = bitbybit.line.convertLinesToNurbsCurves({
@@ -101,16 +109,16 @@ function component() {
                 keepRemainder: false
             });
 
-            const curveScalingFactor = 1;
+            let curveScalingFactor = 1;
             const curveScalingFactorCenter = 1;
 
             const wiresSegmented: Promise<Inputs.OCCT.TopoDSWirePointer[]>[] = [];
-            segmentedLineCurves.forEach((segmentedLineCurve) => {
+            segmentedLineCurves.reverse().forEach((segmentedLineCurve, i: number) => {
                 const wires: Promise<Inputs.OCCT.TopoDSWirePointer>[] = [];
                 segmentedLineCurve.forEach((lineCurve: any) => {
-                    //  lineCurve = bitbybit.verb.curve.reverse({
-                    //     curve: lineCurve
-                    // });
+
+                    curveScalingFactor += (10 / model.numberOfRays);
+
                     const pt1 = bitbybit.verb.curve.startPoint({
                         curve: lineCurve
                     });
@@ -132,25 +140,25 @@ function component() {
                                 parameter: 0.5,
                             })
                         ],
-                        translation: [0, 0, 0.2 * curveScalingFactor]
+                        translation: [0, 0, i % 3 ? 0.3 : 0.4]
                     })[0];
                     const pt4 = bitbybit.point.translatePoints({
                         points: [
                             bitbybit.verb.curve.pointAtParam({
                                 curve: lineCurve,
-                                parameter: 0.99,
+                                parameter: i % 3 ? 0.99 : 1.1
                             })
                         ],
-                        translation: [0, 0, 0.2 * curveScalingFactor]
+                        translation: [0, 0, i % 3 ? 0.15 : 0.05]
                     })[0];
                     const pt5 = bitbybit.point.translatePoints({
                         points: [
                             bitbybit.verb.curve.pointAtParam({
                                 curve: lineCurve,
-                                parameter: 0.99,
+                                parameter: i % 3 ? 0.99 : 1.1
                             })
                         ],
-                        translation: [0, 0, -0.2 * curveScalingFactor]
+                        translation: [0, 0, i % 3 ? -0.15 : -0.05]
                     })[0];
                     const pt6 = bitbybit.point.translatePoints({
                         points: [
@@ -159,7 +167,7 @@ function component() {
                                 parameter: 0.5,
                             })
                         ],
-                        translation: [0, 0, -0.2 * curveScalingFactor]
+                        translation: [0, 0, i % 3 ? -0.3 : -0.4]
                     })[0];
                     const pt7 = bitbybit.point.translatePoints({
                         points: [
@@ -183,7 +191,7 @@ function component() {
 
             const segmentedWires = await Promise.all(wiresSegmented);
             const lofts: Promise<Inputs.OCCT.TopoDSWirePointer>[] = [];
-            segmentedWires.forEach((wires, i) => {
+            segmentedWires.reverse().forEach((wires, i) => {
                 if (i > 10) {
                     const loft = bitbybit.occt.operations.loft({
                         shapes: wires,
@@ -194,86 +202,51 @@ function component() {
             });
 
             const res = await Promise.all(lofts);
-            // const thicks: Promise<Inputs.OCCT.TopoDSShapePointer>[] = [];
 
-            // res.forEach((r, i) => {
-            //     if (i > 10) {
-            //         const thick = bitbybit.occt.fillets.filletEdges({
-            //             shape: r,
-            //             radius: 0.005,
-            //         });
-            //         thicks.push(thick);
-            //     }
-            // });
-            // const thicksRes = await Promise.all(thicks);
+            window.addEventListener("mousemove", (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
             finalShape = await bitbybit.occt.shapes.compound.makeCompound({
                 shapes: res,
             });
 
             const drawOptions = new Inputs.Draw.DrawOcctShapeOptions();
-            const mat = new MeshPhongMaterial({ color: new Color(model.color) });
+            const mat = new MeshPhysicalMaterial({ color: new Color(model.color) });
             mat.polygonOffset = true;
             mat.polygonOffsetFactor = 1;
             mat.polygonOffsetUnits = 2;
             mat.side = 2;
+            mat.metalness = 0.5;
+            mat.roughness = 0.9;
+            mat.specularIntensity = 1;
             drawOptions.faceMaterial = mat;
             drawOptions.edgeColour = "#000000";
-        
+
             const group = await bitbybit.draw.drawAnyAsync({
                 entity: finalShape,
                 options: drawOptions
             })
 
-            // const sphereManifold = await bitbybit.manifold.manifold.shapes.sphere({
-            //     radius: model.numberOfRays,
-            //     circularSegments: 32,
-            // });
-
-            // // max has small tolerance so that strict steps would fit the interval till last item
-            // const span = bitbybit.vector.span({
-            //     step: model.numberOfRays * 2 / (model.nrSubdivisions + 1),
-            //     min: -model.numberOfRays,
-            //     max: model.numberOfRays + 0.000001,
-            // });
-
-            // const slicedManifolds = await manifold.booleans.splitByPlaneOnOffsets({
-            //     manifold: sphereManifold,
-            //     normal: [1, 1, 0.3],
-            //     originOffsets: span
-            // });
-
-            // const spanTranslations = bitbybit.vector.span({
-            //     step: model.numberOfRays * 4 / slicedManifolds.length,
-            //     min: 0,
-            //     max: model.numberOfRays * 4 + 1,
-            // });
-
-            // const translatedManifoldPromises: Promise<Inputs.Manifold.ManifoldPointer>[] = [];
-            // slicedManifolds.forEach((s, i) => {
-            //     const translated = manifold.transforms.translate({
-            //         manifold: s,
-            //         vector: [0, spanTranslations[i], 0]
-            //     });
-            //     translatedManifoldPromises.push(translated);
-            // });
-
-            // const translatedManifolds = await Promise.all(translatedManifoldPromises);
-            // finalManifold = await manifold.operations.compose({
-            //     manifolds: translatedManifolds
-            // });
-
             shapesToClean = [];
-
-            // const options = new Inputs.Draw.DrawManifoldOrCrossSectionOptions();
-            // drawOptions.faceColour = "#6600ff";
-            // const group = await bitbybit.draw.drawAnyAsync({ entity: finalShape, options: drawOptions });
-
             if (group) {
                 group.children[0].children.forEach((child) => {
                     child.castShadow = true;
                     child.receiveShadow = true;
                 });
             }
+
+            if (current.group) {
+                group.rotation.x = current.group.rotation.x;
+                group.rotation.y = current.group.rotation.y;
+                group.rotation.z = current.group.rotation.z;
+
+                current.group.traverse((obj) => {
+                    scene?.remove(obj);
+                });
+            }
+
             current.group = group;
 
         }
@@ -282,9 +255,7 @@ function component() {
     const updateShape = async () => {
         showSpinner();
         disableGUI();
-        current.group?.traverse((obj) => {
-            scene?.remove(obj);
-        });
+
         await createShape(bitbybit, scene);
         enableGUI();
         hideSpinner();
@@ -315,10 +286,10 @@ function component() {
         }
 
         const controls = new OrbitControls(camera, renderer.domElement);
-        camera.position.set(6, 1, 6);
+        camera.position.set(10, 1, 10);
 
         controls.update();
-        controls.target = new Vector3(0, 1, 0);
+        controls.target = new Vector3(-55, 1, 0);
         controls.enableDamping = true;
         controls.dampingFactor = 0.1
         controls.zoomSpeed = 0.1;
@@ -335,8 +306,8 @@ function component() {
 
         // renderer.setClearColor(new Color(0x1a1c1f), 1);
 
-        const dirLight = new DirectionalLight(0xffffff, 30);
-        dirLight.position.set(-30, -50, -30);
+        const dirLight = new DirectionalLight(0x3333ff, 30);
+        dirLight.position.set(30, -50, 30);
         dirLight.castShadow = true;
         dirLight.shadow.camera.near = 0;
         dirLight.shadow.camera.far = 200;
@@ -345,8 +316,8 @@ function component() {
         dirLight.shadow.camera.left = - dist;
         dirLight.shadow.camera.top = dist;
         dirLight.shadow.camera.bottom = - dist;
-        dirLight.shadow.mapSize.width = 3000;
-        dirLight.shadow.mapSize.height = 3000;
+        dirLight.shadow.mapSize.width = 2000;
+        dirLight.shadow.mapSize.height = 2000;
         dirLight.shadow.blurSamples = 8;
         dirLight.shadow.radius = 2;
         dirLight.shadow.bias = -0.0005;
@@ -354,7 +325,7 @@ function component() {
         scene.add(dirLight);
 
         const material = new MeshPhongMaterial({ color: 0x3300ff })
-        material.shininess = 0;
+        material.shininess = 0.3;
         material.specular = new Color(0x222222);
 
         bitbybit.occtWorkerManager.occWorkerState$.subscribe(async s => {
@@ -397,10 +368,10 @@ function component() {
             });
 
         gui
-            .add(model, "nrSubdivisions", 1, 32, 1)
-            .name("Nr Subdivisions")
+            .add(model, "widening", 2, 5, 0.1)
+            .name("Widening")
             .onFinishChange((value: number) => {
-                model.nrSubdivisions = value;
+                model.widening = value;
                 updateShape();
             });
 
@@ -416,6 +387,8 @@ function component() {
                     });
                 }
             })
+
+        const loadButton = gui.add( model, "sourceCode" );
     }
 
     init();

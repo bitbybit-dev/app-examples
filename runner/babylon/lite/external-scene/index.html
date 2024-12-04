@@ -2,53 +2,55 @@
 <html lang="en">
 
 <head>
-    <title>Bitbybit Runner THREEJS Lite Coding Example - Initiate Scene & Camera In Runner</title>
+    <title>Bitbybit Runner BABYLONJS Lite Coding Example - Initiate Scene & Camera Outside Runner</title>
     <base href="/">
     <link rel="icon" type="image/x-icon" href="https://bitbybit.dev/assets/favicon.png">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="This example shows how to import Lite version of bitbybit runner for threejs and initiate scene with a single call to runner. This lite version requires THREEJS to be loaded separately. Lite version of bitbybit-dev bundle is smaller.">
-
-    <script type="importmap">
-            {
-              "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@v0.170.0/build/three.module.js",
-                "three/addons/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@v0.170.0/examples/jsm/controls/OrbitControls.min.js"
-              }
-            }
-          </script>
+        content="This example shows how to import Lite version of bitbybit runner for babylonjs and initiate scene outside the runner. This lite version requires BABYLONJS to be loaded separately. Lite version of bitbybit-dev bundle is smaller.">
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script type="module">
-        import * as THREEJS from 'three';
-        import * as OrbitControls from 'three/addons/controls/OrbitControls';
-        window.THREEJS = THREEJS;
-        window.OrbitControls = OrbitControls;
+        window.GUI = window.BABYLON.GUI;
     </script>
-    <script defer
-        src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.0-patch.0/runner/threejs/bitbybit-runner-lite-threejs.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.0-patch.2/runner/bitbybit-runner-lite-babylonjs.js"></script>
     <script type="module">
+        const canvas = document.getElementById("myCanvas");
+        canvas.addEventListener("wheel", evt => evt.preventDefault());
+        const engine = new BABYLON.Engine(canvas, true);
+        engine.setHardwareScalingLevel(0.5);
+        const scene = new BABYLON.Scene(engine);
+        scene.clearColor = BABYLON.Color4.FromHexString("#1a1c1f");
+        new BABYLON.TransformNode("root", scene);
+        const camera = new BABYLON.ArcRotateCamera("Camera", 0, 10, 10, new BABYLON.Vector3(0, 0, 0), scene);
+        camera.setPosition(new BABYLON.Vector3(10, 5, 10));
+        camera.setTarget(new BABYLON.Vector3(0, 5, 0));
+        camera.attachControl(canvas, true);
+        camera.lowerRadiusLimit = 0;
+        camera.minZ = 0;
+        const light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
+        light.intensityMode = BABYLON.Light.INTENSITYMODE_ILLUMINANCE;
+        light.intensity = 1;
 
         const runnerOptions = {
-            canvasId: 'myCanvas',
             canvasZoneClass: 'myCanvasZone',
             enableOCCT: true,
             enableJSCAD: false,
             enableManifold: false,
-            cameraPosition: [20, 10, 20],
-            cameraTarget: [10, 5, 0],
-            backgroundColor: "#1a1c1f",
             loadFonts: ['Roboto'],
+            externalBabylonJSSettings: {
+                scene,
+            }
         };
 
         const runner = window.bitbybitRunner.getRunnerInstance();
-        const { bitbybit, Bit, camera, scene, renderer } = await runner.run(
+        const { bitbybit, Bit } = await runner.run(
             runnerOptions
         );
-
-        const dirLight = new THREEJS.DirectionalLight(0xffffff, 50);
-        dirLight.position.set(60, 70, -30);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
 
         const model = {
             uRec: 16,
@@ -87,20 +89,9 @@
         options.drawEdges = model.drawEdges;
         options.drawFaces = model.drawFaces;
         options.drawVertices = false;
-        options.edgeWidth = 20;
         options.edgeColour = "#000000";
 
-        const mat = new THREEJS.MeshPhongMaterial({ color: new THREEJS.Color(model.color) });
-        mat.polygonOffset = true;
-        mat.polygonOffsetFactor = 1;
-        options.faceMaterial = mat;
         const group = await bitbybit.draw.drawAnyAsync({ entity: finalShape, options });
-
-        group.children[0].children.forEach((child) => {
-            child.castShadow = true;
-            child.receiveShadow = true;
-        });
-
 
     </script>
     <style>
@@ -170,14 +161,14 @@
             <img alt="Logo of Bit by bit developers company" src="https://bitbybit.dev/assets/logo-gold-small.png" />
             <div>bitbybit.dev</div>
         </a>
-        <h1>Bitbybit Runner THREEJS Lite Coding Example - Initiate Scene & Camera In Runner</h1>
+        <h1>Bitbybit Runner BABYLONJS Lite Coding Example - Initiate Scene & Camera Outside Runner</h1>
         <div class="myCanvasZone">
             <canvas id="myCanvas"></canvas>
         </div>
         <p>
-            This example shows how to import Lite version of bitbybit runner for threejs and initiate scene with a
-            single call to runner. This lite version requires THREEJS to be loaded separately. Lite version of
-            bitbybit-dev bundle is smaller than non-lite.
+            This example shows how to import Lite version of bitbybit runner for babylonjs and initiate scene outside
+            the runner. This lite version requires BABYLONJS to be loaded separately. Lite version of
+            bitbybit-dev bundle is smaller.
         </p>
     </div>
 </body>

@@ -11,7 +11,8 @@
     <meta property="og:title" content="3D Print Logo Of THREEJS - Runner Example">
     <meta property="og:description"
         content="This configurator allows you to create 3D printable version of ThreeJS logo and shows how to import Lite version of bitbybit runner for threejs and initiate scene outside the runner context. This lite version requires THREEJS to be loaded separately. Lite version of bitbybit-dev bundle is smaller.">
-    <meta property="og:image" content="https://app.bitbybit.dev/assets/blog/updated-bitbybit-runners/threejs-logo-3d-print-bitbybit-dev-runner.jpeg">
+    <meta property="og:image"
+        content="https://app.bitbybit.dev/assets/blog/updated-bitbybit-runners/threejs-logo-3d-print-bitbybit-dev-runner.jpeg">
     <meta property="og:image:width" content="1024">
     <meta property="og:image:height" content="1024">
     <meta property="og:url" content="https://app-store.bitbybit.dev/threejs-logo-3d-print">
@@ -20,7 +21,8 @@
     <meta name="twitter:site" content="@bitbybit_dev">
     <meta name="twitter:description"
         content="This configurator allows you to create 3D printable version of ThreeJS logo and shows how to import Lite version of bitbybit runner for threejs and initiate scene outside the runner context. This lite version requires THREEJS to be loaded separately. Lite version of bitbybit-dev bundle is smaller.">
-    <meta name="twitter:image:src" content="https://app.bitbybit.dev/assets/blog/updated-bitbybit-runners/threejs-logo-3d-print-bitbybit-dev-runner.jpeg">
+    <meta name="twitter:image:src"
+        content="https://app.bitbybit.dev/assets/blog/updated-bitbybit-runners/threejs-logo-3d-print-bitbybit-dev-runner.jpeg">
     <meta name="twitter:alt" content="3D Print Logo Of THREEJS - Runner Example">
     <script type="importmap">
             {
@@ -102,8 +104,8 @@
         const dirLight1 = new THREEJS.DirectionalLight(0xffeeff, 50);
         dirLight1.position.set(35, 12, -15);
         const dirLight2 = new THREEJS.DirectionalLight(0xffeeff, 50);
-        dirLight2.position.set(35, -12, -15);        
-        
+        dirLight2.position.set(35, -12, -15);
+
         adjustShadowSettings(dirLight1);
         adjustShadowSettings(dirLight2);
 
@@ -157,6 +159,10 @@
             }
         }
 
+        const goToAppStore = () => {
+            window.open("https://app-store.bitbybit.dev");
+        }
+
         const updateShape = async () => {
             showSpinner();
             disableGUI();
@@ -172,7 +178,8 @@
             heightMid1: 0.2,
             heightMid2: 0.4,
             downloadSTL,
-            downloadStep
+            downloadStep,
+            goToAppStore
         }
 
         const createShape = async () => {
@@ -415,6 +422,7 @@
 
             gui.add(model, "downloadSTL").name("Download STL");
             gui.add(model, "downloadStep").name("Download STEP");
+            gui.add(model, "goToAppStore").name("App Store");
         }
 
         function showSpinner() {
@@ -566,11 +574,18 @@
         <a href="/">
             <img src="https://bitbybit.dev/assets/logo-gold-small.png" width="50px" height="50px" />
         </a>
-        <div>Made with <a href="https://bitbybit.dev">bitbybit.dev</a> & <a href="https://threejs.org">threejs.org</a>
+        <div>Made with <a target="_blank" href="https://bitbybit.dev">bitbybit.dev</a> & <a target="_blank"
+                href="https://threejs.org">threejs.org</a>
         </div>
         <div>Source code on <a
                 href="https://github.com/bitbybit-dev/app-examples/blob/main/runner/threejs/lite/threejs-logo/index.html">github</a>
         </div>
+        <div>Code on <a target="_blank" href="https://codepen.io/matas-bitbybit-dev/pen/yyBebgr">CodePen</a>
+            <a target="_blank"
+                href="https://stackblitz.com/edit/stackblitz-starters-fhck8j?file=script.js">StackBlitz</a> <a
+                target="_blank" href="https://jsfiddle.net/matas_bitbybitdev/qmyLhre3/5/">JSFiddle</a>
+        </div>
+
         <div>Powered by bitbybit runner for ThreeJS
         </div>
     </div>

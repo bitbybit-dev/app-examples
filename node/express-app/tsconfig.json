@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es2016",
-        "module": "nodenext",
-        "outDir": "./dist",
+        "module": "ESNext",
         "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
         "skipLibCheck": true
     },
-    "include": [
-        "./"
+    "lib": [
+        "es2015"
     ]
 }

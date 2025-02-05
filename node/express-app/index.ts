@@ -1,36 +1,31 @@
-import initOpenCascade from "@bitbybit-dev/occt/bitbybit-dev-occt/node.js";
-import { OCCTWire } from "@bitbybit-dev/occt/lib/services/shapes/wire.js";
-import { OccHelper } from "@bitbybit-dev/occt/lib/occ-helper.js";
-import { VectorHelperService } from "@bitbybit-dev/occt/lib/api/vector-helper.service.js";
-import { ShapesHelperService } from "@bitbybit-dev/occt/lib/api/shapes-helper.service.js";
+import express, { Express, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import { BitByBitBase } from './bitbybit';
 
-let wire: OCCTWire;
+const bitbybit = new BitByBitBase();
 
 async function run() {
-    console.log("initializing...");
-    const occ = await initOpenCascade();
-
-    const vecHelper = new VectorHelperService();
-    const shapesHelper = new ShapesHelperService();
-    const helper = new OccHelper(vecHelper, shapesHelper, occ);
-    wire = new OCCTWire(occ, helper);
+    await bitbybit.init();
 }
 
 run();
-
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
 
+
 app.get('/', (req: Request, res: Response) => {
-    if (wire) {
-        const circle = wire.createCircleWire({ radius: 1, center: [0, 0, 0], direction: [0, 1, 0] });
-        const pt = wire.pointOnWireAtParam({ shape: circle, param: 0.2 });
-        res.send(`${pt}`);
+    if (bitbybit) {
+        const cube = bitbybit.occt?.shapes.solid.createCube({ size: 3, center: [0, 0, 0] });
+        const stepTXT = bitbybit.occt?.io.saveShapeSTEP({
+            shape: cube,
+            fileName: "cube.step",
+            adjustYtoZ: true,
+            tryDownload: false,
+        });
+        res.send(`${stepTXT}`);
     } else {
         res.send('OCC not initialised');
     }

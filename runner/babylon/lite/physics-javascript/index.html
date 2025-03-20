@@ -18,7 +18,7 @@
         window.GUI = window.BABYLON.GUI;
     </script>
     <script defer
-        src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.7/runner/bitbybit-runner-lite-babylonjs.js"></script>
+        src="https://cdn.jsdelivr.net/gh/bitbybit-dev/bitbybit-assets@0.19.9/runner/bitbybit-runner-lite-babylonjs.js"></script>
     <script type="module">
         const runnerOptions = {
             canvasId: 'myCanvas',
@@ -295,7 +295,7 @@
                 shapes: [projection],
             });
             const faces = await bitbybit.occt.shapes.face.getFaces({
-                shape: split,
+                shape: split[0],
             });
             const face = faces[7];
             const thicken = await bitbybit.occt.operations.makeThickSolidSimple({
@@ -307,7 +307,7 @@
             });
             return {
                 sphere: thicken,
-                shapesToDelete: [star, sphere, fillet, projection, split, ...faces],
+                shapesToDelete: [star, sphere, fillet, projection, split[0], ...faces],
             };
         }
         async function createBawl(radius, thickness, center) {

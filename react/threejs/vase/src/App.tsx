@@ -105,7 +105,6 @@ function App() {
             options.faceMaterial = mat;
             const group = await bitbybit.draw.drawAnyAsync({ entity: finalVase, options });
 
-
             group.children[0].children.forEach((child) => {
                 child.castShadow = true;
                 child.receiveShadow = true;

@@ -1,5 +1,5 @@
-import { MathBitByBit, Logic, Lists, TextBitByBit, Vector, Point, Transforms, Color, GeometryHelper } from "@bitbybit-dev/base";
-import { JSONBitByBit, Verb, Line, Polyline } from "@bitbybit-dev/core";
+import { MathBitByBit, Logic, Lists, TextBitByBit, Vector, Point, Transforms, Color, GeometryHelper, Line, Polyline } from "@bitbybit-dev/base";
+import { JSONBitByBit, Verb } from "@bitbybit-dev/core";
 import { Jscad } from "@bitbybit-dev/jscad";
 import { ManifoldService } from "@bitbybit-dev/manifold";
 import { OCCTService, OccHelper, VectorHelperService, ShapesHelperService } from "@bitbybit-dev/occt";
@@ -42,21 +42,21 @@ export class BitByBitBase {
         this.manifold = new ManifoldService(wasm);
         const geometryHelper = new GeometryHelper();
         this.math = new MathBitByBit();
+        this.lists = new Lists();
         this.vector = new Vector(this.math, geometryHelper);
         this.color = new Color(this.math);
         this.transforms = new Transforms(this.vector, this.math);
-        this.point = new Point(geometryHelper, this.transforms);
+        this.point = new Point(geometryHelper, this.transforms, this.vector, this.lists);
         const verb = { geom: vrb.geom, core: vrb.core };
         this.verb = new Verb({ verb } as any, geometryHelper, this.math);
-        this.line = new Line({ verb } as any, geometryHelper);
-        this.polyline = new Polyline({ verb } as any, geometryHelper);
+        this.line = new Line(this.vector, this.point, geometryHelper);
+        this.polyline = new Polyline(this.vector, this.point, this.line, geometryHelper);
         const vecHelper = new VectorHelperService();
         const shapesHelper = new ShapesHelperService();
         const occHelper = new OccHelper(vecHelper, shapesHelper, occ);
         this.occt = new OCCTService(occ, occHelper);
         this.logic = new Logic();
         this.json = new JSONBitByBit({ jsonpath: JSONPath } as any);
-        this.text = new TextBitByBit();
-        this.lists = new Lists();
+        this.text = new TextBitByBit(this.point);
     }
 }

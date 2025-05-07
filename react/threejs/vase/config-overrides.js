@@ -1,15 +1,5 @@
 module.exports = {
     webpack: (config) => {
-        config.module.rules.find(k => k.oneOf !== undefined).oneOf.unshift(
-            {
-                test: /\.wasm$/,
-                type: "javascript/auto",
-                loader: "file-loader",
-                options: {
-                    name: "static/js/[name].[contenthash:8].[ext]",
-                },
-            }
-        );
         config.resolve.fallback =
         {
             fs: false,
@@ -20,7 +10,6 @@ module.exports = {
             crypto: false,
             stream: false
         }
-        //this is needed for the bitbybit-occt modules
         config.module.rules.push({
             test: /\.m?js/,
             type: "javascript/auto",
@@ -30,7 +19,7 @@ module.exports = {
             resolve: {
                 fullySpecified: false,
             },
-        })
+        });
         return config;
     },
 };

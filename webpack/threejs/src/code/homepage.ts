@@ -79,14 +79,18 @@ function component() {
             spiralOptions.widening = model.widening;
             spiralOptions.radius = 10;
             spiralOptions.factor = 1;
-            const spiralPoints = bitbybit.point.spiral(spiralOptions)
+            const spiralPoints = bitbybit.point.spiral(spiralOptions);
 
+            // TODO - FIXED BUG v0.20.3
+            // There's missing dependency in the line class
+            (bitbybit.line as any).point = bitbybit.point;
+            
             const lines = bitbybit.line.linesBetweenStartAndEndPoints({
                 startPoints: spiralPoints,
                 endPoints: spiralPoints.map(p => [0, 0, 0]),
             });
 
-            const rays = bitbybit.line.convertLinesToNurbsCurves({
+            const rays = bitbybit.verb.curve.convertLinesToNurbsCurves({
                 lines
             });
 
@@ -95,7 +99,7 @@ function component() {
                 parameter: 0.3
             });
 
-            const spiralingLineCurves = bitbybit.line.convertLinesToNurbsCurves({
+            const spiralingLineCurves = bitbybit.verb.curve.convertLinesToNurbsCurves({
                 lines: bitbybit.line.linesBetweenStartAndEndPoints({
                     startPoints: pointsAtParam,
                     endPoints: spiralPoints,

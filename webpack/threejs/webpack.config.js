@@ -1,8 +1,9 @@
 const path = require('path');
-const version = "0.20.2";
+const version = "0.20.3";
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+    mode: "development",
     entry: {
         index: './src/index.ts',
         patterns: './src/code/patterns.ts',

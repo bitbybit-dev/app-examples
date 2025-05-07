@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BitByBitBase } from "@bitbybit-dev/threejs";
 import { OccStateEnum } from '@bitbybit-dev/occt-worker';
 import './App.css';
-import { Inputs } from '@bitbybit-dev/threejs';
+import * as Inputs from '@bitbybit-dev/threejs/lib/api/inputs';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter'
 import { Button, createTheme, Slider, ThemeProvider } from '@mui/material';
